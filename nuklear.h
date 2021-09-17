@@ -5704,6 +5704,10 @@ struct nk_context {
 #endif
 
 #ifdef __cplusplus
+}
+#endif
+
+#ifdef __cplusplus
 template<typename T> struct nk_alignof;
 template<typename T, int size_diff> struct nk_helper{enum {value = size_diff};};
 template<typename T> struct nk_helper<T,0>{enum {value = nk_alignof<T>::value};};
@@ -5717,9 +5721,6 @@ template<typename T> struct nk_alignof{struct Big {T x; char c;}; enum {
 #define NK_CONTAINER_OF(ptr,type,member)\
     (type*)((void*)((char*)(1 ? (ptr): &((type*)0)->member) - NK_OFFSETOF(type, member)))
 
-#ifdef __cplusplus
-}
-#endif
 
 
 #endif /* NK_NUKLEAR_H_ */
@@ -27620,7 +27621,7 @@ nk_do_property(nk_flags *ws,
         nk_filter_float
     };
     nk_bool active, old;
-    int num_len, name_len;
+    int num_len = 0, name_len;
     char string[NK_MAX_NUMBER_BUFFER];
     float size;
 
@@ -29536,6 +29537,8 @@ nk_tooltipfv(struct nk_context *ctx, const char *fmt, va_list args)
 ///    - [yy]: Minor version with non-breaking API and library changes
 ///    - [zz]: Bug fix version with no direct changes to API
 ///
+/// - 2021/09/15 (4.08.4) - Fix "'num_len' may be used uninitialized" in nk_do_property
+/// - 2021/09/15 (4.08.3) - Fix "Templates cannot be declared to have 'C' Linkage"
 /// - 2021/09/08 (4.08.2) - Fix warnings in C89 builds
 /// - 2021/09/08 (4.08.1) - Use compiler builtins for NK_OFFSETOF when possible
 /// - 2021/08/17 (4.08.0) - Implemented 9-slice scaling support for widget styles
