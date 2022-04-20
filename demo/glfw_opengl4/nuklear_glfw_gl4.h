@@ -116,6 +116,7 @@ NK_API void
 nk_glfw3_device_create()
 {
     GLint status;
+    GLint len = 0;
     static const GLchar *vertex_shader =
         NK_SHADER_VERSION
         NK_SHADER_BINDLESS
@@ -156,7 +157,6 @@ nk_glfw3_device_create()
     glCompileShader(dev->frag_shdr);
     glGetShaderiv(dev->vert_shdr, GL_COMPILE_STATUS, &status);
 
-    GLint len = 0;
     glGetShaderiv(dev->vert_shdr, GL_INFO_LOG_LENGTH, &len);
     if (len > 1) {
         char *log = (char*)calloc((size_t)len, sizeof(char));
@@ -477,6 +477,7 @@ NK_API void
 nk_glfw3_mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
     double x, y;
+    NK_UNUSED(mods);
     if (button != GLFW_MOUSE_BUTTON_LEFT) return;
     glfwGetCursorPos(window, &x, &y);
     if (action == GLFW_PRESS)  {
