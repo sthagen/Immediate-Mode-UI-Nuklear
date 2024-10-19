@@ -6,8 +6,9 @@
 #include <stdio.h>
 #include <time.h>
 
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_vulkan.h>
+#include <vulkan/vulkan.h>
 
 #define NK_INCLUDE_FIXED_TYPES
 #define NK_INCLUDE_STANDARD_IO
@@ -17,10 +18,10 @@
 #define NK_INCLUDE_FONT_BAKING
 #define NK_INCLUDE_DEFAULT_FONT
 #define NK_IMPLEMENTATION
-#define NK_GLFW_VULKAN_IMPLEMENTATION
+#define NK_SDL_VULKAN_IMPLEMENTATION
 #define NK_KEYSTATE_BASED_INPUT
 #include "../../nuklear.h"
-#include "nuklear_glfw_vulkan.h"
+#include "nuklear_sdl_vulkan.h"
 
 #define WINDOW_WIDTH 1200
 #define WINDOW_HEIGHT 800
@@ -35,12 +36,12 @@
  * ===============================================================*/
 /* This are some code examples to provide a small overview of what can be
  * done with this library. To try out an example uncomment the defines */
-/*#define INCLUDE_ALL */
-/*#define INCLUDE_STYLE */
-/*#define INCLUDE_CALCULATOR */
-/*#define INCLUDE_CANVAS */
-/*#define INCLUDE_OVERVIEW*/
-/*#define INCLUDE_NODE_EDITOR */
+/* #define INCLUDE_ALL */
+/* #define INCLUDE_STYLE */
+/* #define INCLUDE_CALCULATOR */
+/* #define INCLUDE_CANVAS */
+/* #define INCLUDE_OVERVIEW */
+/* #define INCLUDE_NODE_EDITOR */
 
 #ifdef INCLUDE_ALL
 #define INCLUDE_STYLE
@@ -100,7 +101,7 @@ void swap_chain_support_details_free(
 }
 
 struct vulkan_demo {
-    GLFWwindow *win;
+    SDL_Window *win;
     VkInstance instance;
     VkDebugUtilsMessengerEXT debug_messenger;
     VkSurfaceKHR surface;
@@ -139,22 +140,7 @@ struct vulkan_demo {
     VkDeviceMemory demo_texture_memory;
 
     VkFence render_fence;
-
-    bool framebuffer_resized;
 };
-
-static void glfw_framebuffer_resize_callback(GLFWwindow* window, int width, int height) {
-    struct vulkan_demo* demo;
-
-    (void)width;
-    (void)height;
-    demo = glfwGetWindowUserPointer(window);
-    demo->framebuffer_resized = true;
-}
-
-static void glfw_error_callback(int e, const char *d) {
-    fprintf(stderr, "Error %d: %s\n", e, d);
-}
 
 VKAPI_ATTR VkBool32 VKAPI_CALL
 vulkan_debug_callback(VkDebugUtilsMessageSeverityFlagBitsEXT message_severity,
@@ -249,8 +235,7 @@ bool create_instance(struct vulkan_demo *demo) {
     bool ret = false;
     VkApplicationInfo app_info;
     VkInstanceCreateInfo create_info;
-    uint32_t glfw_extension_count;
-    const char **glfw_extensions;
+    uint32_t sdl_extension_count;
     uint32_t enabled_extension_count;
     const char **enabled_extensions = NULL;
     bool validation_layers_installed;
@@ -289,20 +274,27 @@ bool create_instance(struct vulkan_demo *demo) {
         printf("  %s\n", available_instance_extensions[i].extensionName);
     }
 
-    glfw_extensions = glfwGetRequiredInstanceExtensions(&glfw_extension_count);
+    if (SDL_Vulkan_GetInstanceExtensions(demo->win, &sdl_extension_count,
+                                         NULL) != SDL_TRUE) {
+        fprintf(stderr, "SDL_Vulkan_GetInstanceExtensions failed: %s\n",
+                SDL_GetError());
+        goto cleanup;
+    }
 
-    enabled_extension_count = glfw_extension_count;
+    enabled_extension_count =
+        sdl_extension_count + (validation_layers_installed ? 1 : 0);
+
+    enabled_extensions = malloc(enabled_extension_count * sizeof(char *));
+    if (SDL_Vulkan_GetInstanceExtensions(demo->win, &sdl_extension_count,
+                                         enabled_extensions) != SDL_TRUE) {
+        fprintf(stderr, "SDL_Vulkan_GetInstanceExtensions failed: %s\n",
+                SDL_GetError());
+        goto cleanup;
+    }
+
     if (validation_layers_installed) {
-        enabled_extension_count += 1;
-        enabled_extensions = malloc(enabled_extension_count * sizeof(char *));
-        memcpy(enabled_extensions, glfw_extensions,
-               glfw_extension_count * sizeof(char *));
-        enabled_extensions[glfw_extension_count] =
+        enabled_extensions[sdl_extension_count] =
             VK_EXT_DEBUG_UTILS_EXTENSION_NAME;
-    } else {
-        enabled_extensions = malloc(enabled_extension_count * sizeof(char *));
-        memcpy(enabled_extensions, glfw_extensions,
-               glfw_extension_count * sizeof(char *));
     }
 
     printf("Trying to enable the following instance extensions: ");
@@ -368,11 +360,11 @@ cleanup:
 }
 
 bool create_surface(struct vulkan_demo *demo) {
-    VkResult result;
-    result = glfwCreateWindowSurface(demo->instance, demo->win, NULL,
-                                     &demo->surface);
-    if (result != VK_SUCCESS) {
-        fprintf(stderr, "creating vulkan surface failed: %d\n", result);
+    SDL_bool result;
+    result =
+        SDL_Vulkan_CreateSurface(demo->win, demo->instance, &demo->surface);
+    if (result != SDL_TRUE) {
+        fprintf(stderr, "creating vulkan surface failed: %s\n", SDL_GetError());
         return false;
     }
     return true;
@@ -745,7 +737,7 @@ VkExtent2D choose_swap_extent(struct vulkan_demo *demo,
         return capabilities->currentExtent;
     } else {
         /* not window size! */
-        glfwGetFramebufferSize(demo->win, &width, &height);
+        SDL_Vulkan_GetDrawableSize(demo->win, &width, &height);
 
         actual_extent.width = (uint32_t)width;
         actual_extent.height = (uint32_t)height;
@@ -1259,7 +1251,7 @@ bool create_graphics_pipeline(struct vulkan_demo *demo) {
     VkGraphicsPipelineCreateInfo pipeline_info;
     size_t read_result;
 
-    fp = fopen("shaders/demo.vert.spv", "rb");
+    fp = fopen("shaders/demo.vert.spv", "r");
     if (!fp) {
         fprintf(stderr, "Couldn't open shaders/demo.vert.spv\n");
         return false;
@@ -1271,7 +1263,7 @@ bool create_graphics_pipeline(struct vulkan_demo *demo) {
     read_result = fread(vert_shader_code, file_len, 1, fp);
     fclose(fp);
     if (read_result != 1) {
-        fprintf(stderr, "Could not read fragment shader\n");
+        fprintf(stderr, "Could not read vertex shader\n");
         goto cleanup;
     }
 
@@ -1280,7 +1272,7 @@ bool create_graphics_pipeline(struct vulkan_demo *demo) {
         goto cleanup;
     }
 
-    fp = fopen("shaders/demo.frag.spv", "rb");
+    fp = fopen("shaders/demo.frag.spv", "r");
     if (!fp) {
         fprintf(stderr, "Couldn't open shaders/demo.frag.spv\n");
         return false;
@@ -1882,8 +1874,6 @@ bool create_vulkan_demo(struct vulkan_demo *demo) {
         return false;
     }
 
-    demo->framebuffer_resized = false;
-
     return true;
 }
 
@@ -1895,11 +1885,11 @@ bool recreate_swap_chain(struct vulkan_demo *demo) {
     if (!create_swap_chain_related_resources(demo)) {
         return false;
     }
-    update_descriptor_sets(demo);
-    nk_glfw3_resize(demo->swap_chain_image_extent.width,
-                    demo->swap_chain_image_extent.height);
 
-    demo->framebuffer_resized = false;
+    update_descriptor_sets(demo);
+
+    nk_sdl_resize(demo->swap_chain_image_extent.width,
+                  demo->swap_chain_image_extent.height);
 
     return true;
 }
@@ -1986,9 +1976,11 @@ bool render(struct vulkan_demo *demo, struct nk_colorf *bg,
 
     result = vkQueuePresentKHR(demo->present_queue, &present_info);
 
-    if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || demo->framebuffer_resized) {
-        recreate_swap_chain(demo);
-    } else if (result != VK_SUCCESS) {
+    if (result == VK_ERROR_OUT_OF_DATE_KHR) {
+        if (!recreate_swap_chain(demo)) {
+            fprintf(stderr, "failed to recreate swap chain!\n");
+        }
+    } else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
         fprintf(stderr, "vkQueuePresentKHR failed: %d\n", result);
         return false;
     }
@@ -2077,6 +2069,8 @@ bool cleanup(struct vulkan_demo *demo) {
         free(demo->command_buffers);
     }
 
+    SDL_DestroyWindow(demo->win);
+
     return true;
 }
 
@@ -2089,32 +2083,32 @@ int main(void) {
     VkResult result;
     VkSemaphore nk_semaphore;
 
-    glfwSetErrorCallback(glfw_error_callback);
-    if (!glfwInit()) {
-        fprintf(stderr, "[GFLW] failed to init!\n");
+    SDL_SetHint(SDL_HINT_VIDEO_HIGHDPI_DISABLED, "0");
+
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        fprintf(stderr, "[SDL] failed to init!\n");
         exit(1);
     }
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+
     memset(&demo, 0, sizeof(struct vulkan_demo));
-    demo.win =
-        glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Demo", NULL, NULL);
-    glfwSetWindowUserPointer(demo.win, &demo);
-    glfwSetFramebufferSizeCallback(demo.win, glfw_framebuffer_resize_callback);
+    demo.win = SDL_CreateWindow(
+        "Demo", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH,
+        WINDOW_HEIGHT,
+        SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
 
     if (!create_vulkan_demo(&demo)) {
         fprintf(stderr, "failed to create vulkan demo!\n");
         exit(1);
     }
-    ctx = nk_glfw3_init(
-        demo.win, demo.device, demo.physical_device, demo.indices.graphics,
-        demo.overlay_image_views, demo.swap_chain_images_len,
-        demo.swap_chain_image_format, NK_GLFW3_INSTALL_CALLBACKS,
-        MAX_VERTEX_BUFFER, MAX_ELEMENT_BUFFER);
+    ctx = nk_sdl_init(demo.win, demo.device, demo.physical_device,
+                      demo.indices.graphics, demo.overlay_image_views,
+                      demo.swap_chain_images_len, demo.swap_chain_image_format,
+                      0, MAX_VERTEX_BUFFER, MAX_ELEMENT_BUFFER);
     /* Load Fonts: if none of these are loaded a default font will be used  */
     /* Load Cursor: if you uncomment cursor loading please hide the cursor */
     {
         struct nk_font_atlas *atlas;
-        nk_glfw3_font_stash_begin(&atlas);
+        nk_sdl_font_stash_begin(&atlas);
         /*struct nk_font *droid = nk_font_atlas_add_from_file(atlas,
          * "../../../extra_font/DroidSans.ttf", 14, 0);*/
         /*struct nk_font *roboto = nk_font_atlas_add_from_file(atlas,
@@ -2127,16 +2121,27 @@ int main(void) {
          * "../../../extra_font/ProggyTiny.ttf", 10, 0);*/
         /*struct nk_font *cousine = nk_font_atlas_add_from_file(atlas,
          * "../../../extra_font/Cousine-Regular.ttf", 13, 0);*/
-        nk_glfw3_font_stash_end(demo.graphics_queue);
+        nk_sdl_font_stash_end(demo.graphics_queue);
         /*nk_style_load_all_cursors(ctx, atlas->cursors);*/
-    /*nk_style_set_font(ctx, &droid->handle);*/}
+        /*nk_style_set_font(ctx, &droid->handle);*/
+    }
 
     img = nk_image_ptr(demo.demo_texture_image_view);
     bg.r = 0.10f, bg.g = 0.18f, bg.b = 0.24f, bg.a = 1.0f;
-    while (!glfwWindowShouldClose(demo.win)) {
-        /* Input */
-        glfwPollEvents();
-        nk_glfw3_new_frame();
+    while (true) {
+        SDL_Event evt;
+
+        nk_input_begin(ctx);
+        while (SDL_PollEvent(&evt)) {
+            if (evt.type == SDL_QUIT)
+                goto cleanup;
+            if (evt.type == SDL_WINDOWEVENT &&
+                evt.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
+                recreate_swap_chain(&demo);
+            nk_sdl_handle_event(&evt);
+        }
+        nk_sdl_handle_grab(); /* optional grabbing behavior */
+        nk_input_end(ctx);
 
         /* GUI */
         if (nk_begin(ctx, "Demo", nk_rect(50, 50, 230, 250),
@@ -2231,16 +2236,16 @@ int main(void) {
         }
 
         /* Draw */
-        nk_semaphore =
-            nk_glfw3_render(demo.graphics_queue, image_index,
-                            demo.image_available, NK_ANTI_ALIASING_ON);
+        nk_semaphore = nk_sdl_render(demo.graphics_queue, image_index,
+                                     demo.image_available, NK_ANTI_ALIASING_ON);
         if (!render(&demo, &bg, nk_semaphore, image_index)) {
             fprintf(stderr, "render failed\n");
             return false;
         }
     }
-    nk_glfw3_shutdown();
+cleanup:
+    nk_sdl_shutdown();
     cleanup(&demo);
-    glfwTerminate();
+    SDL_Quit();
     return 0;
 }

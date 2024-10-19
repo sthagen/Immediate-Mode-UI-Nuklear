@@ -1,6 +1,6 @@
 /*
  * Nuklear - 1.32.0 - public domain
- * no warrenty implied; use at your own risk.
+ * no warranty implied; use at your own risk.
  * authored from 2015-2016 by Micha Mettke
  */
 /*
@@ -10,280 +10,52 @@
  *
  * ===============================================================
  */
-#ifndef NK_GLFW_VULKAN_H_
-#define NK_GLFW_VULKAN_H_
+#ifndef NK_SDL_VULKAN_H_
+#define NK_SDL_VULKAN_H_
 
-unsigned char nuklearshaders_nuklear_vert_spv[] = {
-  0x03, 0x02, 0x23, 0x07, 0x00, 0x00, 0x01, 0x00, 0x0b, 0x00, 0x0d, 0x00,
-  0x45, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x02, 0x00,
-  0x01, 0x00, 0x00, 0x00, 0x0b, 0x00, 0x06, 0x00, 0x01, 0x00, 0x00, 0x00,
-  0x47, 0x4c, 0x53, 0x4c, 0x2e, 0x73, 0x74, 0x64, 0x2e, 0x34, 0x35, 0x30,
-  0x00, 0x00, 0x00, 0x00, 0x0e, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x01, 0x00, 0x00, 0x00, 0x0f, 0x00, 0x0b, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x04, 0x00, 0x00, 0x00, 0x6d, 0x61, 0x69, 0x6e, 0x00, 0x00, 0x00, 0x00,
-  0x0a, 0x00, 0x00, 0x00, 0x16, 0x00, 0x00, 0x00, 0x27, 0x00, 0x00, 0x00,
-  0x2a, 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x43, 0x00, 0x00, 0x00,
-  0x03, 0x00, 0x03, 0x00, 0x02, 0x00, 0x00, 0x00, 0xc2, 0x01, 0x00, 0x00,
-  0x04, 0x00, 0x09, 0x00, 0x47, 0x4c, 0x5f, 0x41, 0x52, 0x42, 0x5f, 0x73,
-  0x65, 0x70, 0x61, 0x72, 0x61, 0x74, 0x65, 0x5f, 0x73, 0x68, 0x61, 0x64,
-  0x65, 0x72, 0x5f, 0x6f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x73, 0x00, 0x00,
-  0x04, 0x00, 0x0a, 0x00, 0x47, 0x4c, 0x5f, 0x47, 0x4f, 0x4f, 0x47, 0x4c,
-  0x45, 0x5f, 0x63, 0x70, 0x70, 0x5f, 0x73, 0x74, 0x79, 0x6c, 0x65, 0x5f,
-  0x6c, 0x69, 0x6e, 0x65, 0x5f, 0x64, 0x69, 0x72, 0x65, 0x63, 0x74, 0x69,
-  0x76, 0x65, 0x00, 0x00, 0x04, 0x00, 0x08, 0x00, 0x47, 0x4c, 0x5f, 0x47,
-  0x4f, 0x4f, 0x47, 0x4c, 0x45, 0x5f, 0x69, 0x6e, 0x63, 0x6c, 0x75, 0x64,
-  0x65, 0x5f, 0x64, 0x69, 0x72, 0x65, 0x63, 0x74, 0x69, 0x76, 0x65, 0x00,
-  0x05, 0x00, 0x04, 0x00, 0x04, 0x00, 0x00, 0x00, 0x6d, 0x61, 0x69, 0x6e,
-  0x00, 0x00, 0x00, 0x00, 0x05, 0x00, 0x06, 0x00, 0x08, 0x00, 0x00, 0x00,
-  0x67, 0x6c, 0x5f, 0x50, 0x65, 0x72, 0x56, 0x65, 0x72, 0x74, 0x65, 0x78,
-  0x00, 0x00, 0x00, 0x00, 0x06, 0x00, 0x06, 0x00, 0x08, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x67, 0x6c, 0x5f, 0x50, 0x6f, 0x73, 0x69, 0x74,
-  0x69, 0x6f, 0x6e, 0x00, 0x05, 0x00, 0x03, 0x00, 0x0a, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x05, 0x00, 0x07, 0x00, 0x0e, 0x00, 0x00, 0x00,
-  0x55, 0x6e, 0x69, 0x66, 0x6f, 0x72, 0x6d, 0x42, 0x75, 0x66, 0x66, 0x65,
-  0x72, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x00, 0x06, 0x00, 0x06, 0x00,
-  0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x70, 0x72, 0x6f, 0x6a,
-  0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x00, 0x00, 0x05, 0x00, 0x03, 0x00,
-  0x10, 0x00, 0x00, 0x00, 0x75, 0x62, 0x6f, 0x00, 0x05, 0x00, 0x05, 0x00,
-  0x16, 0x00, 0x00, 0x00, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e,
-  0x00, 0x00, 0x00, 0x00, 0x05, 0x00, 0x05, 0x00, 0x27, 0x00, 0x00, 0x00,
-  0x66, 0x72, 0x61, 0x67, 0x43, 0x6f, 0x6c, 0x6f, 0x72, 0x00, 0x00, 0x00,
-  0x05, 0x00, 0x04, 0x00, 0x2a, 0x00, 0x00, 0x00, 0x63, 0x6f, 0x6c, 0x6f,
-  0x72, 0x00, 0x00, 0x00, 0x05, 0x00, 0x04, 0x00, 0x42, 0x00, 0x00, 0x00,
-  0x66, 0x72, 0x61, 0x67, 0x55, 0x76, 0x00, 0x00, 0x05, 0x00, 0x03, 0x00,
-  0x43, 0x00, 0x00, 0x00, 0x75, 0x76, 0x00, 0x00, 0x48, 0x00, 0x05, 0x00,
-  0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0b, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x47, 0x00, 0x03, 0x00, 0x08, 0x00, 0x00, 0x00,
-  0x02, 0x00, 0x00, 0x00, 0x48, 0x00, 0x04, 0x00, 0x0e, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x48, 0x00, 0x05, 0x00,
-  0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x23, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x48, 0x00, 0x05, 0x00, 0x0e, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00,
-  0x47, 0x00, 0x03, 0x00, 0x0e, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00,
-  0x47, 0x00, 0x04, 0x00, 0x10, 0x00, 0x00, 0x00, 0x22, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x47, 0x00, 0x04, 0x00, 0x10, 0x00, 0x00, 0x00,
-  0x21, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x47, 0x00, 0x04, 0x00,
-  0x16, 0x00, 0x00, 0x00, 0x1e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x47, 0x00, 0x04, 0x00, 0x27, 0x00, 0x00, 0x00, 0x1e, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x47, 0x00, 0x04, 0x00, 0x2a, 0x00, 0x00, 0x00,
-  0x1e, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x47, 0x00, 0x04, 0x00,
-  0x42, 0x00, 0x00, 0x00, 0x1e, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
-  0x47, 0x00, 0x04, 0x00, 0x43, 0x00, 0x00, 0x00, 0x1e, 0x00, 0x00, 0x00,
-  0x01, 0x00, 0x00, 0x00, 0x13, 0x00, 0x02, 0x00, 0x02, 0x00, 0x00, 0x00,
-  0x21, 0x00, 0x03, 0x00, 0x03, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00,
-  0x16, 0x00, 0x03, 0x00, 0x06, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00,
-  0x17, 0x00, 0x04, 0x00, 0x07, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00,
-  0x04, 0x00, 0x00, 0x00, 0x1e, 0x00, 0x03, 0x00, 0x08, 0x00, 0x00, 0x00,
-  0x07, 0x00, 0x00, 0x00, 0x20, 0x00, 0x04, 0x00, 0x09, 0x00, 0x00, 0x00,
-  0x03, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x3b, 0x00, 0x04, 0x00,
-  0x09, 0x00, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00,
-  0x15, 0x00, 0x04, 0x00, 0x0b, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00,
-  0x01, 0x00, 0x00, 0x00, 0x2b, 0x00, 0x04, 0x00, 0x0b, 0x00, 0x00, 0x00,
-  0x0c, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x18, 0x00, 0x04, 0x00,
-  0x0d, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00,
-  0x1e, 0x00, 0x03, 0x00, 0x0e, 0x00, 0x00, 0x00, 0x0d, 0x00, 0x00, 0x00,
-  0x20, 0x00, 0x04, 0x00, 0x0f, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00,
-  0x0e, 0x00, 0x00, 0x00, 0x3b, 0x00, 0x04, 0x00, 0x0f, 0x00, 0x00, 0x00,
-  0x10, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x20, 0x00, 0x04, 0x00,
-  0x11, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x0d, 0x00, 0x00, 0x00,
-  0x17, 0x00, 0x04, 0x00, 0x14, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00,
-  0x02, 0x00, 0x00, 0x00, 0x20, 0x00, 0x04, 0x00, 0x15, 0x00, 0x00, 0x00,
-  0x01, 0x00, 0x00, 0x00, 0x14, 0x00, 0x00, 0x00, 0x3b, 0x00, 0x04, 0x00,
-  0x15, 0x00, 0x00, 0x00, 0x16, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
-  0x2b, 0x00, 0x04, 0x00, 0x06, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x2b, 0x00, 0x04, 0x00, 0x06, 0x00, 0x00, 0x00,
-  0x19, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x3f, 0x20, 0x00, 0x04, 0x00,
-  0x1e, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00,
-  0x15, 0x00, 0x04, 0x00, 0x20, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x2b, 0x00, 0x04, 0x00, 0x20, 0x00, 0x00, 0x00,
-  0x21, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x20, 0x00, 0x04, 0x00,
-  0x22, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00,
-  0x3b, 0x00, 0x04, 0x00, 0x1e, 0x00, 0x00, 0x00, 0x27, 0x00, 0x00, 0x00,
-  0x03, 0x00, 0x00, 0x00, 0x17, 0x00, 0x04, 0x00, 0x28, 0x00, 0x00, 0x00,
-  0x20, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x20, 0x00, 0x04, 0x00,
-  0x29, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x28, 0x00, 0x00, 0x00,
-  0x3b, 0x00, 0x04, 0x00, 0x29, 0x00, 0x00, 0x00, 0x2a, 0x00, 0x00, 0x00,
-  0x01, 0x00, 0x00, 0x00, 0x2b, 0x00, 0x04, 0x00, 0x20, 0x00, 0x00, 0x00,
-  0x2b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x04, 0x00,
-  0x2c, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00,
-  0x2b, 0x00, 0x04, 0x00, 0x06, 0x00, 0x00, 0x00, 0x30, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x7f, 0x43, 0x2b, 0x00, 0x04, 0x00, 0x20, 0x00, 0x00, 0x00,
-  0x36, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x2b, 0x00, 0x04, 0x00,
-  0x20, 0x00, 0x00, 0x00, 0x3b, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00,
-  0x20, 0x00, 0x04, 0x00, 0x41, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00,
-  0x14, 0x00, 0x00, 0x00, 0x3b, 0x00, 0x04, 0x00, 0x41, 0x00, 0x00, 0x00,
-  0x42, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x3b, 0x00, 0x04, 0x00,
-  0x15, 0x00, 0x00, 0x00, 0x43, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
-  0x36, 0x00, 0x05, 0x00, 0x02, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0xf8, 0x00, 0x02, 0x00,
-  0x05, 0x00, 0x00, 0x00, 0x41, 0x00, 0x05, 0x00, 0x11, 0x00, 0x00, 0x00,
-  0x12, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x0c, 0x00, 0x00, 0x00,
-  0x3d, 0x00, 0x04, 0x00, 0x0d, 0x00, 0x00, 0x00, 0x13, 0x00, 0x00, 0x00,
-  0x12, 0x00, 0x00, 0x00, 0x3d, 0x00, 0x04, 0x00, 0x14, 0x00, 0x00, 0x00,
-  0x17, 0x00, 0x00, 0x00, 0x16, 0x00, 0x00, 0x00, 0x51, 0x00, 0x05, 0x00,
-  0x06, 0x00, 0x00, 0x00, 0x1a, 0x00, 0x00, 0x00, 0x17, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x51, 0x00, 0x05, 0x00, 0x06, 0x00, 0x00, 0x00,
-  0x1b, 0x00, 0x00, 0x00, 0x17, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
-  0x50, 0x00, 0x07, 0x00, 0x07, 0x00, 0x00, 0x00, 0x1c, 0x00, 0x00, 0x00,
-  0x1a, 0x00, 0x00, 0x00, 0x1b, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00,
-  0x19, 0x00, 0x00, 0x00, 0x91, 0x00, 0x05, 0x00, 0x07, 0x00, 0x00, 0x00,
-  0x1d, 0x00, 0x00, 0x00, 0x13, 0x00, 0x00, 0x00, 0x1c, 0x00, 0x00, 0x00,
-  0x41, 0x00, 0x05, 0x00, 0x1e, 0x00, 0x00, 0x00, 0x1f, 0x00, 0x00, 0x00,
-  0x0a, 0x00, 0x00, 0x00, 0x0c, 0x00, 0x00, 0x00, 0x3e, 0x00, 0x03, 0x00,
-  0x1f, 0x00, 0x00, 0x00, 0x1d, 0x00, 0x00, 0x00, 0x41, 0x00, 0x06, 0x00,
-  0x22, 0x00, 0x00, 0x00, 0x23, 0x00, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00,
-  0x0c, 0x00, 0x00, 0x00, 0x21, 0x00, 0x00, 0x00, 0x3d, 0x00, 0x04, 0x00,
-  0x06, 0x00, 0x00, 0x00, 0x24, 0x00, 0x00, 0x00, 0x23, 0x00, 0x00, 0x00,
-  0x7f, 0x00, 0x04, 0x00, 0x06, 0x00, 0x00, 0x00, 0x25, 0x00, 0x00, 0x00,
-  0x24, 0x00, 0x00, 0x00, 0x41, 0x00, 0x06, 0x00, 0x22, 0x00, 0x00, 0x00,
-  0x26, 0x00, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x0c, 0x00, 0x00, 0x00,
-  0x21, 0x00, 0x00, 0x00, 0x3e, 0x00, 0x03, 0x00, 0x26, 0x00, 0x00, 0x00,
-  0x25, 0x00, 0x00, 0x00, 0x41, 0x00, 0x05, 0x00, 0x2c, 0x00, 0x00, 0x00,
-  0x2d, 0x00, 0x00, 0x00, 0x2a, 0x00, 0x00, 0x00, 0x2b, 0x00, 0x00, 0x00,
-  0x3d, 0x00, 0x04, 0x00, 0x20, 0x00, 0x00, 0x00, 0x2e, 0x00, 0x00, 0x00,
-  0x2d, 0x00, 0x00, 0x00, 0x70, 0x00, 0x04, 0x00, 0x06, 0x00, 0x00, 0x00,
-  0x2f, 0x00, 0x00, 0x00, 0x2e, 0x00, 0x00, 0x00, 0x88, 0x00, 0x05, 0x00,
-  0x06, 0x00, 0x00, 0x00, 0x31, 0x00, 0x00, 0x00, 0x2f, 0x00, 0x00, 0x00,
-  0x30, 0x00, 0x00, 0x00, 0x41, 0x00, 0x05, 0x00, 0x2c, 0x00, 0x00, 0x00,
-  0x32, 0x00, 0x00, 0x00, 0x2a, 0x00, 0x00, 0x00, 0x21, 0x00, 0x00, 0x00,
-  0x3d, 0x00, 0x04, 0x00, 0x20, 0x00, 0x00, 0x00, 0x33, 0x00, 0x00, 0x00,
-  0x32, 0x00, 0x00, 0x00, 0x70, 0x00, 0x04, 0x00, 0x06, 0x00, 0x00, 0x00,
-  0x34, 0x00, 0x00, 0x00, 0x33, 0x00, 0x00, 0x00, 0x88, 0x00, 0x05, 0x00,
-  0x06, 0x00, 0x00, 0x00, 0x35, 0x00, 0x00, 0x00, 0x34, 0x00, 0x00, 0x00,
-  0x30, 0x00, 0x00, 0x00, 0x41, 0x00, 0x05, 0x00, 0x2c, 0x00, 0x00, 0x00,
-  0x37, 0x00, 0x00, 0x00, 0x2a, 0x00, 0x00, 0x00, 0x36, 0x00, 0x00, 0x00,
-  0x3d, 0x00, 0x04, 0x00, 0x20, 0x00, 0x00, 0x00, 0x38, 0x00, 0x00, 0x00,
-  0x37, 0x00, 0x00, 0x00, 0x70, 0x00, 0x04, 0x00, 0x06, 0x00, 0x00, 0x00,
-  0x39, 0x00, 0x00, 0x00, 0x38, 0x00, 0x00, 0x00, 0x88, 0x00, 0x05, 0x00,
-  0x06, 0x00, 0x00, 0x00, 0x3a, 0x00, 0x00, 0x00, 0x39, 0x00, 0x00, 0x00,
-  0x30, 0x00, 0x00, 0x00, 0x41, 0x00, 0x05, 0x00, 0x2c, 0x00, 0x00, 0x00,
-  0x3c, 0x00, 0x00, 0x00, 0x2a, 0x00, 0x00, 0x00, 0x3b, 0x00, 0x00, 0x00,
-  0x3d, 0x00, 0x04, 0x00, 0x20, 0x00, 0x00, 0x00, 0x3d, 0x00, 0x00, 0x00,
-  0x3c, 0x00, 0x00, 0x00, 0x70, 0x00, 0x04, 0x00, 0x06, 0x00, 0x00, 0x00,
-  0x3e, 0x00, 0x00, 0x00, 0x3d, 0x00, 0x00, 0x00, 0x88, 0x00, 0x05, 0x00,
-  0x06, 0x00, 0x00, 0x00, 0x3f, 0x00, 0x00, 0x00, 0x3e, 0x00, 0x00, 0x00,
-  0x30, 0x00, 0x00, 0x00, 0x50, 0x00, 0x07, 0x00, 0x07, 0x00, 0x00, 0x00,
-  0x40, 0x00, 0x00, 0x00, 0x31, 0x00, 0x00, 0x00, 0x35, 0x00, 0x00, 0x00,
-  0x3a, 0x00, 0x00, 0x00, 0x3f, 0x00, 0x00, 0x00, 0x3e, 0x00, 0x03, 0x00,
-  0x27, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x3d, 0x00, 0x04, 0x00,
-  0x14, 0x00, 0x00, 0x00, 0x44, 0x00, 0x00, 0x00, 0x43, 0x00, 0x00, 0x00,
-  0x3e, 0x00, 0x03, 0x00, 0x42, 0x00, 0x00, 0x00, 0x44, 0x00, 0x00, 0x00,
-  0xfd, 0x00, 0x01, 0x00, 0x38, 0x00, 0x01, 0x00
-};
-unsigned int nuklearshaders_nuklear_vert_spv_len = 1856;
-unsigned char nuklearshaders_nuklear_frag_spv[] = {
-  0x03, 0x02, 0x23, 0x07, 0x00, 0x00, 0x01, 0x00, 0x0b, 0x00, 0x0d, 0x00,
-  0x1b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x02, 0x00,
-  0x01, 0x00, 0x00, 0x00, 0x0b, 0x00, 0x06, 0x00, 0x01, 0x00, 0x00, 0x00,
-  0x47, 0x4c, 0x53, 0x4c, 0x2e, 0x73, 0x74, 0x64, 0x2e, 0x34, 0x35, 0x30,
-  0x00, 0x00, 0x00, 0x00, 0x0e, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x01, 0x00, 0x00, 0x00, 0x0f, 0x00, 0x08, 0x00, 0x04, 0x00, 0x00, 0x00,
-  0x04, 0x00, 0x00, 0x00, 0x6d, 0x61, 0x69, 0x6e, 0x00, 0x00, 0x00, 0x00,
-  0x11, 0x00, 0x00, 0x00, 0x15, 0x00, 0x00, 0x00, 0x17, 0x00, 0x00, 0x00,
-  0x10, 0x00, 0x03, 0x00, 0x04, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00,
-  0x03, 0x00, 0x03, 0x00, 0x02, 0x00, 0x00, 0x00, 0xc2, 0x01, 0x00, 0x00,
-  0x04, 0x00, 0x09, 0x00, 0x47, 0x4c, 0x5f, 0x41, 0x52, 0x42, 0x5f, 0x73,
-  0x65, 0x70, 0x61, 0x72, 0x61, 0x74, 0x65, 0x5f, 0x73, 0x68, 0x61, 0x64,
-  0x65, 0x72, 0x5f, 0x6f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x73, 0x00, 0x00,
-  0x04, 0x00, 0x0a, 0x00, 0x47, 0x4c, 0x5f, 0x47, 0x4f, 0x4f, 0x47, 0x4c,
-  0x45, 0x5f, 0x63, 0x70, 0x70, 0x5f, 0x73, 0x74, 0x79, 0x6c, 0x65, 0x5f,
-  0x6c, 0x69, 0x6e, 0x65, 0x5f, 0x64, 0x69, 0x72, 0x65, 0x63, 0x74, 0x69,
-  0x76, 0x65, 0x00, 0x00, 0x04, 0x00, 0x08, 0x00, 0x47, 0x4c, 0x5f, 0x47,
-  0x4f, 0x4f, 0x47, 0x4c, 0x45, 0x5f, 0x69, 0x6e, 0x63, 0x6c, 0x75, 0x64,
-  0x65, 0x5f, 0x64, 0x69, 0x72, 0x65, 0x63, 0x74, 0x69, 0x76, 0x65, 0x00,
-  0x05, 0x00, 0x04, 0x00, 0x04, 0x00, 0x00, 0x00, 0x6d, 0x61, 0x69, 0x6e,
-  0x00, 0x00, 0x00, 0x00, 0x05, 0x00, 0x05, 0x00, 0x09, 0x00, 0x00, 0x00,
-  0x74, 0x65, 0x78, 0x43, 0x6f, 0x6c, 0x6f, 0x72, 0x00, 0x00, 0x00, 0x00,
-  0x05, 0x00, 0x06, 0x00, 0x0d, 0x00, 0x00, 0x00, 0x63, 0x75, 0x72, 0x72,
-  0x65, 0x6e, 0x74, 0x54, 0x65, 0x78, 0x74, 0x75, 0x72, 0x65, 0x00, 0x00,
-  0x05, 0x00, 0x04, 0x00, 0x11, 0x00, 0x00, 0x00, 0x66, 0x72, 0x61, 0x67,
-  0x55, 0x76, 0x00, 0x00, 0x05, 0x00, 0x05, 0x00, 0x15, 0x00, 0x00, 0x00,
-  0x6f, 0x75, 0x74, 0x43, 0x6f, 0x6c, 0x6f, 0x72, 0x00, 0x00, 0x00, 0x00,
-  0x05, 0x00, 0x05, 0x00, 0x17, 0x00, 0x00, 0x00, 0x66, 0x72, 0x61, 0x67,
-  0x43, 0x6f, 0x6c, 0x6f, 0x72, 0x00, 0x00, 0x00, 0x47, 0x00, 0x04, 0x00,
-  0x0d, 0x00, 0x00, 0x00, 0x22, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
-  0x47, 0x00, 0x04, 0x00, 0x0d, 0x00, 0x00, 0x00, 0x21, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x47, 0x00, 0x04, 0x00, 0x11, 0x00, 0x00, 0x00,
-  0x1e, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x47, 0x00, 0x04, 0x00,
-  0x15, 0x00, 0x00, 0x00, 0x1e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x47, 0x00, 0x04, 0x00, 0x17, 0x00, 0x00, 0x00, 0x1e, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x13, 0x00, 0x02, 0x00, 0x02, 0x00, 0x00, 0x00,
-  0x21, 0x00, 0x03, 0x00, 0x03, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00,
-  0x16, 0x00, 0x03, 0x00, 0x06, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00,
-  0x17, 0x00, 0x04, 0x00, 0x07, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00,
-  0x04, 0x00, 0x00, 0x00, 0x20, 0x00, 0x04, 0x00, 0x08, 0x00, 0x00, 0x00,
-  0x07, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00, 0x19, 0x00, 0x09, 0x00,
-  0x0a, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1b, 0x00, 0x03, 0x00,
-  0x0b, 0x00, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x20, 0x00, 0x04, 0x00,
-  0x0c, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0b, 0x00, 0x00, 0x00,
-  0x3b, 0x00, 0x04, 0x00, 0x0c, 0x00, 0x00, 0x00, 0x0d, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x17, 0x00, 0x04, 0x00, 0x0f, 0x00, 0x00, 0x00,
-  0x06, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x20, 0x00, 0x04, 0x00,
-  0x10, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x0f, 0x00, 0x00, 0x00,
-  0x3b, 0x00, 0x04, 0x00, 0x10, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00,
-  0x01, 0x00, 0x00, 0x00, 0x20, 0x00, 0x04, 0x00, 0x14, 0x00, 0x00, 0x00,
-  0x03, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00, 0x3b, 0x00, 0x04, 0x00,
-  0x14, 0x00, 0x00, 0x00, 0x15, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00,
-  0x20, 0x00, 0x04, 0x00, 0x16, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
-  0x07, 0x00, 0x00, 0x00, 0x3b, 0x00, 0x04, 0x00, 0x16, 0x00, 0x00, 0x00,
-  0x17, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x36, 0x00, 0x05, 0x00,
-  0x02, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x03, 0x00, 0x00, 0x00, 0xf8, 0x00, 0x02, 0x00, 0x05, 0x00, 0x00, 0x00,
-  0x3b, 0x00, 0x04, 0x00, 0x08, 0x00, 0x00, 0x00, 0x09, 0x00, 0x00, 0x00,
-  0x07, 0x00, 0x00, 0x00, 0x3d, 0x00, 0x04, 0x00, 0x0b, 0x00, 0x00, 0x00,
-  0x0e, 0x00, 0x00, 0x00, 0x0d, 0x00, 0x00, 0x00, 0x3d, 0x00, 0x04, 0x00,
-  0x0f, 0x00, 0x00, 0x00, 0x12, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00,
-  0x57, 0x00, 0x05, 0x00, 0x07, 0x00, 0x00, 0x00, 0x13, 0x00, 0x00, 0x00,
-  0x0e, 0x00, 0x00, 0x00, 0x12, 0x00, 0x00, 0x00, 0x3e, 0x00, 0x03, 0x00,
-  0x09, 0x00, 0x00, 0x00, 0x13, 0x00, 0x00, 0x00, 0x3d, 0x00, 0x04, 0x00,
-  0x07, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00, 0x17, 0x00, 0x00, 0x00,
-  0x3d, 0x00, 0x04, 0x00, 0x07, 0x00, 0x00, 0x00, 0x19, 0x00, 0x00, 0x00,
-  0x09, 0x00, 0x00, 0x00, 0x85, 0x00, 0x05, 0x00, 0x07, 0x00, 0x00, 0x00,
-  0x1a, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00, 0x19, 0x00, 0x00, 0x00,
-  0x3e, 0x00, 0x03, 0x00, 0x15, 0x00, 0x00, 0x00, 0x1a, 0x00, 0x00, 0x00,
-  0xfd, 0x00, 0x01, 0x00, 0x38, 0x00, 0x01, 0x00
-};
-unsigned int nuklearshaders_nuklear_frag_spv_len = 860;
+// NUKLEAR_SHADERS_START
+// will be replaced with the real shader code
+// so we can have some ide support while editing the .in file
+#include "nuklear.h"
+
+unsigned char nuklearshaders_nuklear_vert_spv[] = {};
+unsigned int nuklearshaders_nuklear_vert_spv_len = 0;
+unsigned char nuklearshaders_nuklear_frag_spv[] = {};
+unsigned int nuklearshaders_nuklear_frag_spv_len = 0;
+// NUKLEAR_SHADERS_END
 
 #include <assert.h>
 #include <stddef.h>
 #include <string.h>
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
+#include <SDL2/SDL.h>
 
-enum nk_glfw_init_state { NK_GLFW3_DEFAULT = 0, NK_GLFW3_INSTALL_CALLBACKS };
+enum nk_sdl_init_state { NK_SDL_DEFAULT = 0 };
 
 NK_API struct nk_context *
-nk_glfw3_init(GLFWwindow *win, VkDevice logical_device,
-              VkPhysicalDevice physical_device,
-              uint32_t graphics_queue_family_index, VkImageView *image_views,
-              uint32_t image_views_len, VkFormat color_format,
-              enum nk_glfw_init_state init_state,
-              VkDeviceSize max_vertex_buffer, VkDeviceSize max_element_buffer);
-NK_API void nk_glfw3_shutdown(void);
-NK_API void nk_glfw3_font_stash_begin(struct nk_font_atlas **atlas);
-NK_API void nk_glfw3_font_stash_end(VkQueue graphics_queue);
-NK_API void nk_glfw3_new_frame();
-NK_API VkSemaphore nk_glfw3_render(VkQueue graphics_queue,
-                                   uint32_t buffer_index,
-                                   VkSemaphore wait_semaphore,
-                                   enum nk_anti_aliasing AA);
-NK_API void nk_glfw3_resize(uint32_t framebuffer_width,
-                            uint32_t framebuffer_height);
-NK_API void nk_glfw3_device_destroy(void);
-NK_API void nk_glfw3_device_create(
-    VkDevice logical_device, VkPhysicalDevice physical_device,
-    uint32_t graphics_queue_family_index, VkImageView *image_views,
-    uint32_t image_views_len, VkFormat color_format,
-    VkDeviceSize max_vertex_buffer, VkDeviceSize max_element_buffer,
-    uint32_t framebuffer_width, uint32_t framebuffer_height);
-
-NK_API void nk_glfw3_char_callback(GLFWwindow *win, unsigned int codepoint);
-NK_API void nk_gflw3_scroll_callback(GLFWwindow *win, double xoff, double yoff);
-NK_API void nk_glfw3_mouse_button_callback(GLFWwindow *win, int button,
-                                           int action, int mods);
+nk_sdl_init(SDL_Window *win, VkDevice logical_device,
+            VkPhysicalDevice physical_device,
+            uint32_t graphics_queue_family_index, VkImageView *image_views,
+            uint32_t image_views_len, VkFormat color_format,
+            enum nk_sdl_init_state init_state, VkDeviceSize max_vertex_buffer,
+            VkDeviceSize max_element_buffer);
+NK_API void nk_sdl_shutdown(void);
+NK_API void nk_sdl_font_stash_begin(struct nk_font_atlas **atlas);
+NK_API void nk_sdl_font_stash_end(VkQueue graphics_queue);
+NK_API int nk_sdl_handle_event(SDL_Event *evt);
+NK_API VkSemaphore nk_sdl_render(VkQueue graphics_queue, uint32_t buffer_index,
+                                 VkSemaphore wait_semaphore,
+                                 enum nk_anti_aliasing AA);
+NK_API void nk_sdl_resize(uint32_t framebuffer_width,
+                          uint32_t framebuffer_height);
+NK_API void nk_sdl_device_destroy(void);
+NK_API void
+nk_sdl_device_create(VkDevice logical_device, VkPhysicalDevice physical_device,
+                     uint32_t graphics_queue_family_index,
+                     VkImageView *image_views, uint32_t image_views_len,
+                     VkFormat color_format, VkDeviceSize max_vertex_buffer,
+                     VkDeviceSize max_element_buffer,
+                     uint32_t framebuffer_width, uint32_t framebuffer_height);
+NK_API void nk_sdl_handle_grab(void);
 
 #endif
 /*
@@ -293,28 +65,25 @@ NK_API void nk_glfw3_mouse_button_callback(GLFWwindow *win, int button,
  *
  * ===============================================================
  */
-#ifdef NK_GLFW_VULKAN_IMPLEMENTATION
-#undef NK_GLFW_VULKAN_IMPLEMENTATION
+#ifdef NK_SDL_VULKAN_IMPLEMENTATION
+#undef NK_SDL_VULKAN_IMPLEMENTATION
 #include <stdlib.h>
 
-#ifndef NK_GLFW_TEXT_MAX
-#define NK_GLFW_TEXT_MAX 256
+#ifndef NK_SDL_TEXT_MAX
+#define NK_SDL_TEXT_MAX 256
 #endif
-#ifndef NK_GLFW_DOUBLE_CLICK_LO
-#define NK_GLFW_DOUBLE_CLICK_LO 0.02
+#ifndef NK_SDL_MAX_TEXTURES
+#define NK_SDL_MAX_TEXTURES 256
 #endif
-#ifndef NK_GLFW_DOUBLE_CLICK_HI
-#define NK_GLFW_DOUBLE_CLICK_HI 0.2
-#endif
-#ifndef NK_GLFW_MAX_TEXTURES
-#define NK_GLFW_MAX_TEXTURES 256
+#ifndef NK_SDL_MAX_KEYS
+#define NK_SDL_MAX_KEYS 32
 #endif
 
 #define VK_COLOR_COMPONENT_MASK_RGBA                                           \
     VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |                      \
         VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT
 
-struct nk_glfw_vertex {
+struct nk_sdl_vertex {
     float position[2];
     float uv[2];
     nk_byte col[4];
@@ -325,7 +94,7 @@ struct nk_vulkan_texture_descriptor_set {
     VkDescriptorSet descriptor_set;
 };
 
-struct nk_glfw_device {
+struct nk_sdl_device {
     struct nk_buffer cmds;
     struct nk_draw_null_texture tex_null;
     int max_vertex_buffer;
@@ -365,29 +134,26 @@ struct nk_glfw_device {
     VkDeviceMemory font_memory;
 };
 
-static struct nk_glfw {
-    GLFWwindow *win;
+static struct nk_sdl {
+    SDL_Window *win;
     int width, height;
     int display_width, display_height;
-    struct nk_glfw_device vulkan;
+    struct nk_sdl_device vulkan;
     struct nk_context ctx;
     struct nk_font_atlas atlas;
-    unsigned int text[NK_GLFW_TEXT_MAX];
+    unsigned int text[NK_SDL_TEXT_MAX];
     int text_len;
     struct nk_vec2 scroll;
-    double last_button_click;
-    int is_double_click_down;
-    struct nk_vec2 double_click_pos;
-    float delta_time_seconds_last;
-} glfw;
+    uint64_t delta_time_milliseconds_last;
+} sdl;
 
 struct Mat4f {
     float m[16];
 };
 
-NK_INTERN uint32_t nk_glfw3_find_memory_index(
-    VkPhysicalDevice physical_device, uint32_t type_filter,
-    VkMemoryPropertyFlags properties) {
+NK_INTERN uint32_t nk_sdl_find_memory_index(VkPhysicalDevice physical_device,
+                                            uint32_t type_filter,
+                                            VkMemoryPropertyFlags properties) {
     VkPhysicalDeviceMemoryProperties mem_properties;
     uint32_t i;
 
@@ -404,7 +170,7 @@ NK_INTERN uint32_t nk_glfw3_find_memory_index(
     return 0;
 }
 
-NK_INTERN void nk_glfw3_create_sampler(struct nk_glfw_device *dev) {
+NK_INTERN void nk_sdl_create_sampler(struct nk_sdl_device *dev) {
     VkResult result;
     VkSamplerCreateInfo sampler_info;
     memset(&sampler_info, 0, sizeof(VkSamplerCreateInfo));
@@ -431,8 +197,8 @@ NK_INTERN void nk_glfw3_create_sampler(struct nk_glfw_device *dev) {
 }
 
 NK_INTERN void
-nk_glfw3_create_command_pool(struct nk_glfw_device *dev,
-                             uint32_t graphics_queue_family_index) {
+nk_sdl_create_command_pool(struct nk_sdl_device *dev,
+                           uint32_t graphics_queue_family_index) {
     VkResult result;
     VkCommandPoolCreateInfo pool_info;
     memset(&pool_info, 0, sizeof(VkCommandPoolCreateInfo));
@@ -445,7 +211,7 @@ nk_glfw3_create_command_pool(struct nk_glfw_device *dev,
     NK_ASSERT(result == VK_SUCCESS);
 }
 
-NK_INTERN void nk_glfw3_create_command_buffers(struct nk_glfw_device *dev) {
+NK_INTERN void nk_sdl_create_command_buffers(struct nk_sdl_device *dev) {
     VkResult result;
     VkCommandBufferAllocateInfo allocate_info;
     memset(&allocate_info, 0, sizeof(VkCommandBufferAllocateInfo));
@@ -464,7 +230,7 @@ NK_INTERN void nk_glfw3_create_command_buffers(struct nk_glfw_device *dev) {
     NK_ASSERT(result == VK_SUCCESS);
 }
 
-NK_INTERN void nk_glfw3_create_semaphore(struct nk_glfw_device *dev) {
+NK_INTERN void nk_sdl_create_semaphore(struct nk_sdl_device *dev) {
     VkResult result;
     VkSemaphoreCreateInfo semaphore_info;
     memset(&semaphore_info, 0, sizeof(VkSemaphoreCreateInfo));
@@ -475,11 +241,11 @@ NK_INTERN void nk_glfw3_create_semaphore(struct nk_glfw_device *dev) {
     NK_ASSERT(result == VK_SUCCESS);
 }
 
-NK_INTERN void nk_glfw3_create_buffer_and_memory(struct nk_glfw_device *dev,
-                                                 VkBuffer *buffer,
-                                                 VkBufferUsageFlags usage,
-                                                 VkDeviceMemory *memory,
-                                                 VkDeviceSize size) {
+NK_INTERN void nk_sdl_create_buffer_and_memory(struct nk_sdl_device *dev,
+                                               VkBuffer *buffer,
+                                               VkBufferUsageFlags usage,
+                                               VkDeviceMemory *memory,
+                                               VkDeviceSize size) {
     VkMemoryRequirements mem_reqs;
     VkResult result;
     VkBufferCreateInfo buffer_info;
@@ -499,10 +265,10 @@ NK_INTERN void nk_glfw3_create_buffer_and_memory(struct nk_glfw_device *dev,
     memset(&alloc_info, 0, sizeof(VkMemoryAllocateInfo));
     alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     alloc_info.allocationSize = mem_reqs.size;
-    alloc_info.memoryTypeIndex = nk_glfw3_find_memory_index(
-        dev->physical_device, mem_reqs.memoryTypeBits,
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-            VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+    alloc_info.memoryTypeIndex =
+        nk_sdl_find_memory_index(dev->physical_device, mem_reqs.memoryTypeBits,
+                                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+                                     VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
     result = vkAllocateMemory(dev->logical_device, &alloc_info, NULL, memory);
     NK_ASSERT(result == VK_SUCCESS);
@@ -510,7 +276,7 @@ NK_INTERN void nk_glfw3_create_buffer_and_memory(struct nk_glfw_device *dev,
     NK_ASSERT(result == VK_SUCCESS);
 }
 
-NK_INTERN void nk_glfw3_create_render_pass(struct nk_glfw_device *dev) {
+NK_INTERN void nk_sdl_create_render_pass(struct nk_sdl_device *dev) {
     VkAttachmentDescription attachment;
     VkAttachmentReference color_reference;
     VkSubpassDependency subpass_dependency;
@@ -562,9 +328,9 @@ NK_INTERN void nk_glfw3_create_render_pass(struct nk_glfw_device *dev) {
     NK_ASSERT(result == VK_SUCCESS);
 }
 
-NK_INTERN void nk_glfw3_create_framebuffers(struct nk_glfw_device *dev,
-                                            uint32_t framebuffer_width,
-                                            uint32_t framebuffer_height) {
+NK_INTERN void nk_sdl_create_framebuffers(struct nk_sdl_device *dev,
+                                          uint32_t framebuffer_width,
+                                          uint32_t framebuffer_height) {
 
     VkFramebufferCreateInfo framebuffer_create_info;
     uint32_t i;
@@ -590,7 +356,7 @@ NK_INTERN void nk_glfw3_create_framebuffers(struct nk_glfw_device *dev,
     dev->framebuffers_len = dev->image_views_len;
 }
 
-NK_INTERN void nk_glfw3_create_descriptor_pool(struct nk_glfw_device *dev) {
+NK_INTERN void nk_sdl_create_descriptor_pool(struct nk_sdl_device *dev) {
     VkDescriptorPoolSize pool_sizes[2];
     VkDescriptorPoolCreateInfo pool_info;
     VkResult result;
@@ -599,13 +365,13 @@ NK_INTERN void nk_glfw3_create_descriptor_pool(struct nk_glfw_device *dev) {
     pool_sizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
     pool_sizes[0].descriptorCount = 1;
     pool_sizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-    pool_sizes[1].descriptorCount = NK_GLFW_MAX_TEXTURES;
+    pool_sizes[1].descriptorCount = NK_SDL_MAX_TEXTURES;
 
     memset(&pool_info, 0, sizeof(VkDescriptorPoolCreateInfo));
     pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
     pool_info.poolSizeCount = 2;
     pool_info.pPoolSizes = pool_sizes;
-    pool_info.maxSets = 1 + NK_GLFW_MAX_TEXTURES;
+    pool_info.maxSets = 1 + NK_SDL_MAX_TEXTURES;
 
     result = vkCreateDescriptorPool(dev->logical_device, &pool_info, NULL,
                                     &dev->descriptor_pool);
@@ -613,7 +379,7 @@ NK_INTERN void nk_glfw3_create_descriptor_pool(struct nk_glfw_device *dev) {
 }
 
 NK_INTERN void
-nk_glfw3_create_uniform_descriptor_set_layout(struct nk_glfw_device *dev) {
+nk_sdl_create_uniform_descriptor_set_layout(struct nk_sdl_device *dev) {
     VkDescriptorSetLayoutBinding binding;
     VkDescriptorSetLayoutCreateInfo descriptor_set_info;
     VkResult result;
@@ -638,7 +404,7 @@ nk_glfw3_create_uniform_descriptor_set_layout(struct nk_glfw_device *dev) {
 }
 
 NK_INTERN void
-nk_glfw3_create_and_update_uniform_descriptor_set(struct nk_glfw_device *dev) {
+nk_sdl_create_and_update_uniform_descriptor_set(struct nk_sdl_device *dev) {
     VkDescriptorSetAllocateInfo allocate_info;
     VkDescriptorBufferInfo buffer_info;
     VkWriteDescriptorSet descriptor_write;
@@ -672,7 +438,7 @@ nk_glfw3_create_and_update_uniform_descriptor_set(struct nk_glfw_device *dev) {
 }
 
 NK_INTERN void
-nk_glfw3_create_texture_descriptor_set_layout(struct nk_glfw_device *dev) {
+nk_sdl_create_texture_descriptor_set_layout(struct nk_sdl_device *dev) {
     VkDescriptorSetLayoutBinding binding;
     VkDescriptorSetLayoutCreateInfo descriptor_set_info;
     VkResult result;
@@ -697,7 +463,7 @@ nk_glfw3_create_texture_descriptor_set_layout(struct nk_glfw_device *dev) {
 }
 
 NK_INTERN void
-nk_glfw3_create_texture_descriptor_sets(struct nk_glfw_device *dev) {
+nk_sdl_create_texture_descriptor_sets(struct nk_sdl_device *dev) {
     VkDescriptorSetLayout *descriptor_set_layouts;
     VkDescriptorSet *descriptor_sets;
     VkDescriptorSetAllocateInfo allocate_info;
@@ -705,17 +471,17 @@ nk_glfw3_create_texture_descriptor_sets(struct nk_glfw_device *dev) {
     int i;
 
     descriptor_set_layouts = (VkDescriptorSetLayout *)malloc(
-        NK_GLFW_MAX_TEXTURES * sizeof(VkDescriptorSetLayout));
-    descriptor_sets = (VkDescriptorSet *)malloc(NK_GLFW_MAX_TEXTURES *
+        NK_SDL_MAX_TEXTURES * sizeof(VkDescriptorSetLayout));
+    descriptor_sets = (VkDescriptorSet *)malloc(NK_SDL_MAX_TEXTURES *
                                                 sizeof(VkDescriptorSet));
 
     dev->texture_descriptor_sets =
         (struct nk_vulkan_texture_descriptor_set *)malloc(
-            NK_GLFW_MAX_TEXTURES *
+            NK_SDL_MAX_TEXTURES *
             sizeof(struct nk_vulkan_texture_descriptor_set));
     dev->texture_descriptor_sets_len = 0;
 
-    for (i = 0; i < NK_GLFW_MAX_TEXTURES; i++) {
+    for (i = 0; i < NK_SDL_MAX_TEXTURES; i++) {
         descriptor_set_layouts[i] = dev->texture_descriptor_set_layout;
         descriptor_sets[i] = dev->texture_descriptor_sets[i].descriptor_set;
     }
@@ -723,21 +489,21 @@ nk_glfw3_create_texture_descriptor_sets(struct nk_glfw_device *dev) {
     memset(&allocate_info, 0, sizeof(VkDescriptorSetAllocateInfo));
     allocate_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
     allocate_info.descriptorPool = dev->descriptor_pool;
-    allocate_info.descriptorSetCount = NK_GLFW_MAX_TEXTURES;
+    allocate_info.descriptorSetCount = NK_SDL_MAX_TEXTURES;
     allocate_info.pSetLayouts = descriptor_set_layouts;
 
     result = vkAllocateDescriptorSets(dev->logical_device, &allocate_info,
                                       descriptor_sets);
     NK_ASSERT(result == VK_SUCCESS);
 
-    for (i = 0; i < NK_GLFW_MAX_TEXTURES; i++) {
+    for (i = 0; i < NK_SDL_MAX_TEXTURES; i++) {
         dev->texture_descriptor_sets[i].descriptor_set = descriptor_sets[i];
     }
     free(descriptor_set_layouts);
     free(descriptor_sets);
 }
 
-NK_INTERN void nk_glfw3_create_pipeline_layout(struct nk_glfw_device *dev) {
+NK_INTERN void nk_sdl_create_pipeline_layout(struct nk_sdl_device *dev) {
     VkPipelineLayoutCreateInfo pipeline_layout_info;
     VkDescriptorSetLayout descriptor_set_layouts[2];
     VkResult result;
@@ -756,8 +522,8 @@ NK_INTERN void nk_glfw3_create_pipeline_layout(struct nk_glfw_device *dev) {
 }
 
 NK_INTERN VkPipelineShaderStageCreateInfo
-nk_glfw3_create_shader(struct nk_glfw_device *dev, unsigned char *spv_shader,
-                       uint32_t size, VkShaderStageFlagBits stage_bit) {
+nk_sdl_create_shader(struct nk_sdl_device *dev, unsigned char *spv_shader,
+                     uint32_t size, VkShaderStageFlagBits stage_bit) {
     VkShaderModuleCreateInfo create_info;
     VkPipelineShaderStageCreateInfo shader_info;
     VkShaderModule module = NULL;
@@ -779,7 +545,7 @@ nk_glfw3_create_shader(struct nk_glfw_device *dev, unsigned char *spv_shader,
     return shader_info;
 }
 
-NK_INTERN void nk_glfw3_create_pipeline(struct nk_glfw_device *dev) {
+NK_INTERN void nk_sdl_create_pipeline(struct nk_sdl_device *dev) {
     VkPipelineInputAssemblyStateCreateInfo input_assembly_state;
     VkPipelineRasterizationStateCreateInfo rasterization_state;
     VkPipelineColorBlendAttachmentState attachment_state = {
@@ -843,16 +609,16 @@ NK_INTERN void nk_glfw3_create_pipeline(struct nk_glfw_device *dev) {
     dynamic_state.pDynamicStates = dynamic_states;
     dynamic_state.dynamicStateCount = 2;
 
-    shader_stages[0] = nk_glfw3_create_shader(
+    shader_stages[0] = nk_sdl_create_shader(
         dev, nuklearshaders_nuklear_vert_spv,
         nuklearshaders_nuklear_vert_spv_len, VK_SHADER_STAGE_VERTEX_BIT);
-    shader_stages[1] = nk_glfw3_create_shader(
+    shader_stages[1] = nk_sdl_create_shader(
         dev, nuklearshaders_nuklear_frag_spv,
         nuklearshaders_nuklear_frag_spv_len, VK_SHADER_STAGE_FRAGMENT_BIT);
 
     memset(&vertex_input_info, 0, sizeof(VkVertexInputBindingDescription));
     vertex_input_info.binding = 0;
-    vertex_input_info.stride = sizeof(struct nk_glfw_vertex);
+    vertex_input_info.stride = sizeof(struct nk_sdl_vertex);
     vertex_input_info.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
     memset(&vertex_attribute_description, 0,
@@ -860,15 +626,15 @@ NK_INTERN void nk_glfw3_create_pipeline(struct nk_glfw_device *dev) {
     vertex_attribute_description[0].location = 0;
     vertex_attribute_description[0].format = VK_FORMAT_R32G32_SFLOAT;
     vertex_attribute_description[0].offset =
-        NK_OFFSETOF(struct nk_glfw_vertex, position);
+        NK_OFFSETOF(struct nk_sdl_vertex, position);
     vertex_attribute_description[1].location = 1;
     vertex_attribute_description[1].format = VK_FORMAT_R32G32_SFLOAT;
     vertex_attribute_description[1].offset =
-        NK_OFFSETOF(struct nk_glfw_vertex, uv);
+        NK_OFFSETOF(struct nk_sdl_vertex, uv);
     vertex_attribute_description[2].location = 2;
     vertex_attribute_description[2].format = VK_FORMAT_R8G8B8A8_UINT;
     vertex_attribute_description[2].offset =
-        NK_OFFSETOF(struct nk_glfw_vertex, col);
+        NK_OFFSETOF(struct nk_sdl_vertex, col);
 
     memset(&vertex_input, 0, sizeof(VkPipelineVertexInputStateCreateInfo));
     vertex_input.sType =
@@ -903,27 +669,28 @@ NK_INTERN void nk_glfw3_create_pipeline(struct nk_glfw_device *dev) {
     vkDestroyShaderModule(dev->logical_device, shader_stages[1].module, NULL);
 }
 
-NK_INTERN void nk_glfw3_create_render_resources(struct nk_glfw_device *dev,
-                                                uint32_t framebuffer_width,
-                                                uint32_t framebuffer_height) {
-    nk_glfw3_create_render_pass(dev);
-    nk_glfw3_create_framebuffers(dev, framebuffer_width, framebuffer_height);
-    nk_glfw3_create_descriptor_pool(dev);
-    nk_glfw3_create_uniform_descriptor_set_layout(dev);
-    nk_glfw3_create_and_update_uniform_descriptor_set(dev);
-    nk_glfw3_create_texture_descriptor_set_layout(dev);
-    nk_glfw3_create_texture_descriptor_sets(dev);
-    nk_glfw3_create_pipeline_layout(dev);
-    nk_glfw3_create_pipeline(dev);
+NK_INTERN void nk_sdl_create_render_resources(struct nk_sdl_device *dev,
+                                              uint32_t framebuffer_width,
+                                              uint32_t framebuffer_height) {
+    nk_sdl_create_render_pass(dev);
+    nk_sdl_create_framebuffers(dev, framebuffer_width, framebuffer_height);
+    nk_sdl_create_descriptor_pool(dev);
+    nk_sdl_create_uniform_descriptor_set_layout(dev);
+    nk_sdl_create_and_update_uniform_descriptor_set(dev);
+    nk_sdl_create_texture_descriptor_set_layout(dev);
+    nk_sdl_create_texture_descriptor_sets(dev);
+    nk_sdl_create_pipeline_layout(dev);
+    nk_sdl_create_pipeline(dev);
 }
 
-NK_API void nk_glfw3_device_create(
-    VkDevice logical_device, VkPhysicalDevice physical_device,
-    uint32_t graphics_queue_family_index, VkImageView *image_views,
-    uint32_t image_views_len, VkFormat color_format,
-    VkDeviceSize max_vertex_buffer, VkDeviceSize max_element_buffer,
-    uint32_t framebuffer_width, uint32_t framebuffer_height) {
-    struct nk_glfw_device *dev = &glfw.vulkan;
+NK_API void
+nk_sdl_device_create(VkDevice logical_device, VkPhysicalDevice physical_device,
+                     uint32_t graphics_queue_family_index,
+                     VkImageView *image_views, uint32_t image_views_len,
+                     VkFormat color_format, VkDeviceSize max_vertex_buffer,
+                     VkDeviceSize max_element_buffer,
+                     uint32_t framebuffer_width, uint32_t framebuffer_height) {
+    struct nk_sdl_device *dev = &sdl.vulkan;
     dev->max_vertex_buffer = max_vertex_buffer;
     dev->max_element_buffer = max_element_buffer;
     nk_buffer_init_default(&dev->cmds);
@@ -935,20 +702,20 @@ NK_API void nk_glfw3_device_create(
     dev->framebuffers = NULL;
     dev->framebuffers_len = 0;
 
-    nk_glfw3_create_sampler(dev);
-    nk_glfw3_create_command_pool(dev, graphics_queue_family_index);
-    nk_glfw3_create_command_buffers(dev);
-    nk_glfw3_create_semaphore(dev);
+    nk_sdl_create_sampler(dev);
+    nk_sdl_create_command_pool(dev, graphics_queue_family_index);
+    nk_sdl_create_command_buffers(dev);
+    nk_sdl_create_semaphore(dev);
 
-    nk_glfw3_create_buffer_and_memory(dev, &dev->vertex_buffer,
-                                      VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
-                                      &dev->vertex_memory, max_vertex_buffer);
-    nk_glfw3_create_buffer_and_memory(dev, &dev->index_buffer,
-                                      VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
-                                      &dev->index_memory, max_element_buffer);
-    nk_glfw3_create_buffer_and_memory(
-        dev, &dev->uniform_buffer, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
-        &dev->uniform_memory, sizeof(struct Mat4f));
+    nk_sdl_create_buffer_and_memory(dev, &dev->vertex_buffer,
+                                    VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+                                    &dev->vertex_memory, max_vertex_buffer);
+    nk_sdl_create_buffer_and_memory(dev, &dev->index_buffer,
+                                    VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
+                                    &dev->index_memory, max_element_buffer);
+    nk_sdl_create_buffer_and_memory(dev, &dev->uniform_buffer,
+                                    VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+                                    &dev->uniform_memory, sizeof(struct Mat4f));
 
     vkMapMemory(dev->logical_device, dev->vertex_memory, 0, max_vertex_buffer,
                 0, &dev->mapped_vertex);
@@ -957,14 +724,13 @@ NK_API void nk_glfw3_device_create(
     vkMapMemory(dev->logical_device, dev->uniform_memory, 0,
                 sizeof(struct Mat4f), 0, &dev->mapped_uniform);
 
-    nk_glfw3_create_render_resources(dev, framebuffer_width,
-                                     framebuffer_height);
+    nk_sdl_create_render_resources(dev, framebuffer_width, framebuffer_height);
 }
 
-NK_INTERN void nk_glfw3_device_upload_atlas(VkQueue graphics_queue,
-                                            const void *image, int width,
-                                            int height) {
-    struct nk_glfw_device *dev = &glfw.vulkan;
+NK_INTERN void nk_sdl_device_upload_atlas(VkQueue graphics_queue,
+                                          const void *image, int width,
+                                          int height) {
+    struct nk_sdl_device *dev = &sdl.vulkan;
 
     VkImageCreateInfo image_info;
     VkResult result;
@@ -1012,9 +778,9 @@ NK_INTERN void nk_glfw3_device_upload_atlas(VkQueue graphics_queue,
     memset(&alloc_info, 0, sizeof(VkMemoryAllocateInfo));
     alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     alloc_info.allocationSize = mem_reqs.size;
-    alloc_info.memoryTypeIndex = nk_glfw3_find_memory_index(
-        dev->physical_device, mem_reqs.memoryTypeBits,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+    alloc_info.memoryTypeIndex =
+        nk_sdl_find_memory_index(dev->physical_device, mem_reqs.memoryTypeBits,
+                                 VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
     result = vkAllocateMemory(dev->logical_device, &alloc_info, NULL,
                               &dev->font_memory);
@@ -1036,10 +802,10 @@ NK_INTERN void nk_glfw3_device_upload_atlas(VkQueue graphics_queue,
                                   &mem_reqs);
 
     alloc_info.allocationSize = mem_reqs.size;
-    alloc_info.memoryTypeIndex = nk_glfw3_find_memory_index(
-        dev->physical_device, mem_reqs.memoryTypeBits,
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-            VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+    alloc_info.memoryTypeIndex =
+        nk_sdl_find_memory_index(dev->physical_device, mem_reqs.memoryTypeBits,
+                                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+                                     VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
     result = vkAllocateMemory(dev->logical_device, &alloc_info, NULL,
                               &staging_buffer.memory);
@@ -1153,7 +919,7 @@ NK_INTERN void nk_glfw3_device_upload_atlas(VkQueue graphics_queue,
     NK_ASSERT(result == VK_SUCCESS);
 }
 
-NK_INTERN void nk_glfw3_destroy_render_resources(struct nk_glfw_device *dev) {
+NK_INTERN void nk_sdl_destroy_render_resources(struct nk_sdl_device *dev) {
     uint32_t i;
 
     vkDestroyPipeline(dev->logical_device, dev->pipeline, NULL);
@@ -1173,23 +939,24 @@ NK_INTERN void nk_glfw3_destroy_render_resources(struct nk_glfw_device *dev) {
     vkDestroyRenderPass(dev->logical_device, dev->render_pass, NULL);
 }
 
-NK_API void nk_glfw3_resize(uint32_t framebuffer_width,
-                            uint32_t framebuffer_height) {
-    struct nk_glfw_device *dev = &glfw.vulkan;
-    glfwGetWindowSize(glfw.win, &glfw.width, &glfw.height);
-    glfwGetFramebufferSize(glfw.win, &glfw.display_width, &glfw.display_height);
+NK_API void nk_sdl_resize(uint32_t framebuffer_width,
+                          uint32_t framebuffer_height) {
+    struct nk_sdl_device *dev = &sdl.vulkan;
 
-    nk_glfw3_destroy_render_resources(dev);
-    nk_glfw3_create_render_resources(dev, framebuffer_width,
-                                     framebuffer_height);
+    SDL_GetWindowSize(sdl.win, &sdl.width, &sdl.height);
+    sdl.display_width = framebuffer_width;
+    sdl.display_height = framebuffer_height;
+
+    nk_sdl_destroy_render_resources(dev);
+    nk_sdl_create_render_resources(dev, sdl.display_width, sdl.display_height);
 }
 
-NK_API void nk_glfw3_device_destroy(void) {
-    struct nk_glfw_device *dev = &glfw.vulkan;
+NK_API void nk_sdl_device_destroy(void) {
+    struct nk_sdl_device *dev = &sdl.vulkan;
 
     vkDeviceWaitIdle(dev->logical_device);
 
-    nk_glfw3_destroy_render_resources(dev);
+    nk_sdl_destroy_render_resources(dev);
 
     vkFreeCommandBuffers(dev->logical_device, dev->command_pool,
                          dev->command_buffers_len, dev->command_buffers);
@@ -1219,143 +986,182 @@ NK_API void nk_glfw3_device_destroy(void) {
 }
 
 NK_API
-void nk_glfw3_shutdown(void) {
-    nk_font_atlas_clear(&glfw.atlas);
-    nk_free(&glfw.ctx);
-    nk_glfw3_device_destroy();
-    memset(&glfw, 0, sizeof(glfw));
+void nk_sdl_shutdown(void) {
+    nk_font_atlas_clear(&sdl.atlas);
+    nk_free(&sdl.ctx);
+    nk_sdl_device_destroy();
+    memset(&sdl, 0, sizeof(sdl));
 }
 
-NK_API void nk_glfw3_font_stash_begin(struct nk_font_atlas **atlas) {
-    nk_font_atlas_init_default(&glfw.atlas);
-    nk_font_atlas_begin(&glfw.atlas);
-    *atlas = &glfw.atlas;
+NK_API void nk_sdl_font_stash_begin(struct nk_font_atlas **atlas) {
+    nk_font_atlas_init_default(&sdl.atlas);
+    nk_font_atlas_begin(&sdl.atlas);
+    *atlas = &sdl.atlas;
 }
 
-NK_API void nk_glfw3_font_stash_end(VkQueue graphics_queue) {
-    struct nk_glfw_device *dev = &glfw.vulkan;
+NK_API void nk_sdl_font_stash_end(VkQueue graphics_queue) {
+    struct nk_sdl_device *dev = &sdl.vulkan;
 
     const void *image;
     int w, h;
-    image = nk_font_atlas_bake(&glfw.atlas, &w, &h, NK_FONT_ATLAS_RGBA32);
-    nk_glfw3_device_upload_atlas(graphics_queue, image, w, h);
-    nk_font_atlas_end(&glfw.atlas, nk_handle_ptr(dev->font_image_view),
+    image = nk_font_atlas_bake(&sdl.atlas, &w, &h, NK_FONT_ATLAS_RGBA32);
+    nk_sdl_device_upload_atlas(graphics_queue, image, w, h);
+    nk_font_atlas_end(&sdl.atlas, nk_handle_ptr(dev->font_image_view),
                       &dev->tex_null);
-    if (glfw.atlas.default_font) {
-        nk_style_set_font(&glfw.ctx, &glfw.atlas.default_font->handle);
+    if (sdl.atlas.default_font) {
+        nk_style_set_font(&sdl.ctx, &sdl.atlas.default_font->handle);
     }
 }
 
-NK_API void nk_glfw3_new_frame(void) {
-    int i;
-    double x, y;
-    struct nk_context *ctx = &glfw.ctx;
-    struct GLFWwindow *win = glfw.win;
-
-    /* update the timer */
-    float delta_time_now = (float)glfwGetTime();
-    glfw.ctx.delta_time_seconds = delta_time_now - glfw.delta_time_seconds_last;
-    glfw.delta_time_seconds_last = delta_time_now;
-
-    nk_input_begin(ctx);
-    for (i = 0; i < glfw.text_len; ++i)
-        nk_input_unicode(ctx, glfw.text[i]);
-
-#ifdef NK_GLFW_VULKAN_MOUSE_GRABBING
-    /* optional grabbing behavior */
-    if (ctx->input.mouse.grab)
-        glfwSetInputMode(glfw.win, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-    else if (ctx->input.mouse.ungrab)
-        glfwSetInputMode(glfw.win, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-#endif
-
-    nk_input_key(ctx, NK_KEY_DEL,
-                 glfwGetKey(win, GLFW_KEY_DELETE) == GLFW_PRESS);
-    nk_input_key(ctx, NK_KEY_ENTER,
-                 glfwGetKey(win, GLFW_KEY_ENTER) == GLFW_PRESS);
-    nk_input_key(ctx, NK_KEY_TAB, glfwGetKey(win, GLFW_KEY_TAB) == GLFW_PRESS);
-    nk_input_key(ctx, NK_KEY_BACKSPACE,
-                 glfwGetKey(win, GLFW_KEY_BACKSPACE) == GLFW_PRESS);
-    nk_input_key(ctx, NK_KEY_UP, glfwGetKey(win, GLFW_KEY_UP) == GLFW_PRESS);
-    nk_input_key(ctx, NK_KEY_DOWN,
-                 glfwGetKey(win, GLFW_KEY_DOWN) == GLFW_PRESS);
-    nk_input_key(ctx, NK_KEY_TEXT_START,
-                 glfwGetKey(win, GLFW_KEY_HOME) == GLFW_PRESS);
-    nk_input_key(ctx, NK_KEY_TEXT_END,
-                 glfwGetKey(win, GLFW_KEY_END) == GLFW_PRESS);
-    nk_input_key(ctx, NK_KEY_SCROLL_START,
-                 glfwGetKey(win, GLFW_KEY_HOME) == GLFW_PRESS);
-    nk_input_key(ctx, NK_KEY_SCROLL_END,
-                 glfwGetKey(win, GLFW_KEY_END) == GLFW_PRESS);
-    nk_input_key(ctx, NK_KEY_SCROLL_DOWN,
-                 glfwGetKey(win, GLFW_KEY_PAGE_DOWN) == GLFW_PRESS);
-    nk_input_key(ctx, NK_KEY_SCROLL_UP,
-                 glfwGetKey(win, GLFW_KEY_PAGE_UP) == GLFW_PRESS);
-    nk_input_key(ctx, NK_KEY_SHIFT,
-                 glfwGetKey(win, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ||
-                     glfwGetKey(win, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS);
-
-    if (glfwGetKey(win, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS ||
-        glfwGetKey(win, GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS) {
-        nk_input_key(ctx, NK_KEY_COPY,
-                     glfwGetKey(win, GLFW_KEY_C) == GLFW_PRESS);
-        nk_input_key(ctx, NK_KEY_PASTE,
-                     glfwGetKey(win, GLFW_KEY_V) == GLFW_PRESS);
-        nk_input_key(ctx, NK_KEY_CUT,
-                     glfwGetKey(win, GLFW_KEY_X) == GLFW_PRESS);
-        nk_input_key(ctx, NK_KEY_TEXT_UNDO,
-                     glfwGetKey(win, GLFW_KEY_Z) == GLFW_PRESS);
-        nk_input_key(ctx, NK_KEY_TEXT_REDO,
-                     glfwGetKey(win, GLFW_KEY_R) == GLFW_PRESS);
-        nk_input_key(ctx, NK_KEY_TEXT_WORD_LEFT,
-                     glfwGetKey(win, GLFW_KEY_LEFT) == GLFW_PRESS);
-        nk_input_key(ctx, NK_KEY_TEXT_WORD_RIGHT,
-                     glfwGetKey(win, GLFW_KEY_RIGHT) == GLFW_PRESS);
-        nk_input_key(ctx, NK_KEY_TEXT_LINE_START,
-                     glfwGetKey(win, GLFW_KEY_B) == GLFW_PRESS);
-        nk_input_key(ctx, NK_KEY_TEXT_LINE_END,
-                     glfwGetKey(win, GLFW_KEY_E) == GLFW_PRESS);
-        nk_input_key(ctx, NK_KEY_TEXT_SELECT_ALL,
-                     glfwGetKey(win, GLFW_KEY_A) == GLFW_PRESS);
-    } else {
-        nk_input_key(ctx, NK_KEY_LEFT,
-                     glfwGetKey(win, GLFW_KEY_LEFT) == GLFW_PRESS);
-        nk_input_key(ctx, NK_KEY_RIGHT,
-                     glfwGetKey(win, GLFW_KEY_RIGHT) == GLFW_PRESS);
-        nk_input_key(ctx, NK_KEY_COPY, 0);
-        nk_input_key(ctx, NK_KEY_PASTE, 0);
-        nk_input_key(ctx, NK_KEY_CUT, 0);
-    }
-
-    glfwGetCursorPos(win, &x, &y);
-    nk_input_motion(ctx, (int)x, (int)y);
-#ifdef NK_GLFW_VULKAN_MOUSE_GRABBING
-    if (ctx->input.mouse.grabbed) {
-        glfwSetCursorPos(glfw.win, ctx->input.mouse.prev.x,
-                         ctx->input.mouse.prev.y);
+NK_API void nk_sdl_handle_grab(void) {
+    struct nk_context *ctx = &sdl.ctx;
+    if (ctx->input.mouse.grab) {
+        SDL_SetRelativeMouseMode(SDL_TRUE);
+    } else if (ctx->input.mouse.ungrab) {
+        /* better support for older SDL by setting mode first; causes an extra
+         * mouse motion event */
+        SDL_SetRelativeMouseMode(SDL_FALSE);
+        SDL_WarpMouseInWindow(sdl.win, (int)ctx->input.mouse.prev.x,
+                              (int)ctx->input.mouse.prev.y);
+    } else if (ctx->input.mouse.grabbed) {
         ctx->input.mouse.pos.x = ctx->input.mouse.prev.x;
         ctx->input.mouse.pos.y = ctx->input.mouse.prev.y;
     }
-#endif
-    nk_input_button(ctx, NK_BUTTON_LEFT, (int)x, (int)y,
-                    glfwGetMouseButton(win, GLFW_MOUSE_BUTTON_LEFT) ==
-                        GLFW_PRESS);
-    nk_input_button(ctx, NK_BUTTON_MIDDLE, (int)x, (int)y,
-                    glfwGetMouseButton(win, GLFW_MOUSE_BUTTON_MIDDLE) ==
-                        GLFW_PRESS);
-    nk_input_button(ctx, NK_BUTTON_RIGHT, (int)x, (int)y,
-                    glfwGetMouseButton(win, GLFW_MOUSE_BUTTON_RIGHT) ==
-                        GLFW_PRESS);
-    nk_input_button(ctx, NK_BUTTON_DOUBLE, (int)glfw.double_click_pos.x,
-                    (int)glfw.double_click_pos.y, glfw.is_double_click_down);
-    nk_input_scroll(ctx, glfw.scroll);
-    nk_input_end(&glfw.ctx);
-    glfw.text_len = 0;
-    glfw.scroll = nk_vec2(0, 0);
+}
+
+NK_API int nk_sdl_handle_event(SDL_Event *evt) {
+    struct nk_context *ctx = &sdl.ctx;
+
+    switch (evt->type) {
+    case SDL_KEYUP: /* KEYUP & KEYDOWN share same routine */
+    case SDL_KEYDOWN: {
+        int down = evt->type == SDL_KEYDOWN;
+        const Uint8 *state = SDL_GetKeyboardState(0);
+        switch (evt->key.keysym.sym) {
+        case SDLK_RSHIFT: /* RSHIFT & LSHIFT share same routine */
+        case SDLK_LSHIFT:
+            nk_input_key(ctx, NK_KEY_SHIFT, down);
+            break;
+        case SDLK_DELETE:
+            nk_input_key(ctx, NK_KEY_DEL, down);
+            break;
+        case SDLK_RETURN:
+            nk_input_key(ctx, NK_KEY_ENTER, down);
+            break;
+        case SDLK_TAB:
+            nk_input_key(ctx, NK_KEY_TAB, down);
+            break;
+        case SDLK_BACKSPACE:
+            nk_input_key(ctx, NK_KEY_BACKSPACE, down);
+            break;
+        case SDLK_HOME:
+            nk_input_key(ctx, NK_KEY_TEXT_START, down);
+            nk_input_key(ctx, NK_KEY_SCROLL_START, down);
+            break;
+        case SDLK_END:
+            nk_input_key(ctx, NK_KEY_TEXT_END, down);
+            nk_input_key(ctx, NK_KEY_SCROLL_END, down);
+            break;
+        case SDLK_PAGEDOWN:
+            nk_input_key(ctx, NK_KEY_SCROLL_DOWN, down);
+            break;
+        case SDLK_PAGEUP:
+            nk_input_key(ctx, NK_KEY_SCROLL_UP, down);
+            break;
+        case SDLK_z:
+            nk_input_key(ctx, NK_KEY_TEXT_UNDO,
+                         down && state[SDL_SCANCODE_LCTRL]);
+            break;
+        case SDLK_r:
+            nk_input_key(ctx, NK_KEY_TEXT_REDO,
+                         down && state[SDL_SCANCODE_LCTRL]);
+            break;
+        case SDLK_c:
+            nk_input_key(ctx, NK_KEY_COPY, down && state[SDL_SCANCODE_LCTRL]);
+            break;
+        case SDLK_v:
+            nk_input_key(ctx, NK_KEY_PASTE, down && state[SDL_SCANCODE_LCTRL]);
+            break;
+        case SDLK_x:
+            nk_input_key(ctx, NK_KEY_CUT, down && state[SDL_SCANCODE_LCTRL]);
+            break;
+        case SDLK_b:
+            nk_input_key(ctx, NK_KEY_TEXT_LINE_START,
+                         down && state[SDL_SCANCODE_LCTRL]);
+            break;
+        case SDLK_e:
+            nk_input_key(ctx, NK_KEY_TEXT_LINE_END,
+                         down && state[SDL_SCANCODE_LCTRL]);
+            break;
+        case SDLK_UP:
+            nk_input_key(ctx, NK_KEY_UP, down);
+            break;
+        case SDLK_DOWN:
+            nk_input_key(ctx, NK_KEY_DOWN, down);
+            break;
+        case SDLK_LEFT:
+            if (state[SDL_SCANCODE_LCTRL])
+                nk_input_key(ctx, NK_KEY_TEXT_WORD_LEFT, down);
+            else
+                nk_input_key(ctx, NK_KEY_LEFT, down);
+            break;
+        case SDLK_RIGHT:
+            if (state[SDL_SCANCODE_LCTRL])
+                nk_input_key(ctx, NK_KEY_TEXT_WORD_RIGHT, down);
+            else
+                nk_input_key(ctx, NK_KEY_RIGHT, down);
+            break;
+        }
+        return 1;
+    }
+
+    case SDL_MOUSEBUTTONUP: /* MOUSEBUTTONUP & MOUSEBUTTONDOWN share same
+                               routine */
+    case SDL_MOUSEBUTTONDOWN: {
+        int down = evt->type == SDL_MOUSEBUTTONDOWN;
+        const int x = evt->button.x, y = evt->button.y;
+        switch (evt->button.button) {
+        case SDL_BUTTON_LEFT:
+            if (evt->button.clicks > 1)
+                nk_input_button(ctx, NK_BUTTON_DOUBLE, x, y, down);
+            nk_input_button(ctx, NK_BUTTON_LEFT, x, y, down);
+            break;
+        case SDL_BUTTON_MIDDLE:
+            nk_input_button(ctx, NK_BUTTON_MIDDLE, x, y, down);
+            break;
+        case SDL_BUTTON_RIGHT:
+            nk_input_button(ctx, NK_BUTTON_RIGHT, x, y, down);
+            break;
+        }
+        return 1;
+    }
+
+    case SDL_MOUSEMOTION: {
+        if (ctx->input.mouse.grabbed) {
+            int x = (int)ctx->input.mouse.prev.x,
+                y = (int)ctx->input.mouse.prev.y;
+            nk_input_motion(ctx, x + evt->motion.xrel, y + evt->motion.yrel);
+        } else
+            nk_input_motion(ctx, evt->motion.x, evt->motion.y);
+        return 1;
+    }
+
+    case SDL_TEXTINPUT: {
+        nk_glyph glyph;
+        memcpy(glyph, evt->text.text, NK_UTF_SIZE);
+        nk_input_glyph(ctx, glyph);
+        return 1;
+    }
+
+    case SDL_MOUSEWHEEL:
+        nk_input_scroll(ctx, nk_vec2((float)evt->wheel.x, (float)evt->wheel.y));
+        return 1;
+    }
+    return 0;
 }
 
 NK_INTERN void update_texture_descriptor_set(
-    struct nk_glfw_device *dev,
+    struct nk_sdl_device *dev,
     struct nk_vulkan_texture_descriptor_set *texture_descriptor_set,
     VkImageView image_view) {
     VkDescriptorImageInfo descriptor_image_info;
@@ -1382,10 +1188,10 @@ NK_INTERN void update_texture_descriptor_set(
 }
 
 NK_API
-VkSemaphore nk_glfw3_render(VkQueue graphics_queue, uint32_t buffer_index,
-                            VkSemaphore wait_semaphore,
-                            enum nk_anti_aliasing AA) {
-    struct nk_glfw_device *dev = &glfw.vulkan;
+VkSemaphore nk_sdl_render(VkQueue graphics_queue, uint32_t buffer_index,
+                          VkSemaphore wait_semaphore,
+                          enum nk_anti_aliasing AA) {
+    struct nk_sdl_device *dev = &sdl.vulkan;
     struct nk_buffer vbuf, ebuf;
 
     struct Mat4f projection = {
@@ -1409,9 +1215,15 @@ VkSemaphore nk_glfw3_render(VkQueue graphics_queue, uint32_t buffer_index,
     VkPipelineStageFlags wait_stage =
         VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
     VkSubmitInfo submit_info;
+    uint64_t time_now;
 
-    projection.m[0] /= glfw.width;
-    projection.m[5] /= glfw.height;
+    time_now = SDL_GetTicks64();
+    sdl.ctx.delta_time_seconds =
+        (float)(time_now - sdl.delta_time_milliseconds_last) / 1000.0f;
+    sdl.delta_time_milliseconds_last = time_now;
+
+    projection.m[0] /= sdl.display_width;
+    projection.m[5] /= sdl.display_height;
 
     memcpy(dev->mapped_uniform, &projection, sizeof(projection));
 
@@ -1421,8 +1233,9 @@ VkSemaphore nk_glfw3_render(VkQueue graphics_queue, uint32_t buffer_index,
     memset(&render_pass_begin_nfo, 0, sizeof(VkRenderPassBeginInfo));
     render_pass_begin_nfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
     render_pass_begin_nfo.renderPass = dev->render_pass;
-    render_pass_begin_nfo.renderArea.extent.width = (uint32_t)glfw.width;
-    render_pass_begin_nfo.renderArea.extent.height = (uint32_t)glfw.height;
+    render_pass_begin_nfo.renderArea.extent.width = (uint32_t)sdl.display_width;
+    render_pass_begin_nfo.renderArea.extent.height =
+        (uint32_t)sdl.display_height;
     render_pass_begin_nfo.clearValueCount = 1;
     render_pass_begin_nfo.pClearValues = &clear_value;
     render_pass_begin_nfo.framebuffer = dev->framebuffers[buffer_index];
@@ -1435,8 +1248,8 @@ VkSemaphore nk_glfw3_render(VkQueue graphics_queue, uint32_t buffer_index,
                          VK_SUBPASS_CONTENTS_INLINE);
 
     memset(&viewport, 0, sizeof(VkViewport));
-    viewport.width = (float)glfw.width;
-    viewport.height = (float)glfw.height;
+    viewport.width = (float)sdl.width;
+    viewport.height = (float)sdl.height;
     viewport.maxDepth = 1.0f;
     vkCmdSetViewport(command_buffer, 0, 1, &viewport);
 
@@ -1455,16 +1268,16 @@ VkSemaphore nk_glfw3_render(VkQueue graphics_queue, uint32_t buffer_index,
             struct nk_convert_config config;
             static const struct nk_draw_vertex_layout_element vertex_layout[] =
                 {{NK_VERTEX_POSITION, NK_FORMAT_FLOAT,
-                  NK_OFFSETOF(struct nk_glfw_vertex, position)},
+                  NK_OFFSETOF(struct nk_sdl_vertex, position)},
                  {NK_VERTEX_TEXCOORD, NK_FORMAT_FLOAT,
-                  NK_OFFSETOF(struct nk_glfw_vertex, uv)},
+                  NK_OFFSETOF(struct nk_sdl_vertex, uv)},
                  {NK_VERTEX_COLOR, NK_FORMAT_R8G8B8A8,
-                  NK_OFFSETOF(struct nk_glfw_vertex, col)},
+                  NK_OFFSETOF(struct nk_sdl_vertex, col)},
                  {NK_VERTEX_LAYOUT_END}};
             NK_MEMSET(&config, 0, sizeof(config));
             config.vertex_layout = vertex_layout;
-            config.vertex_size = sizeof(struct nk_glfw_vertex);
-            config.vertex_alignment = NK_ALIGNOF(struct nk_glfw_vertex);
+            config.vertex_size = sizeof(struct nk_sdl_vertex);
+            config.vertex_alignment = NK_ALIGNOF(struct nk_sdl_vertex);
             config.tex_null = dev->tex_null;
             config.circle_segment_count = 22;
             config.curve_segment_count = 22;
@@ -1478,7 +1291,7 @@ VkSemaphore nk_glfw3_render(VkQueue graphics_queue, uint32_t buffer_index,
                                  (size_t)dev->max_vertex_buffer);
             nk_buffer_init_fixed(&ebuf, dev->mapped_index,
                                  (size_t)dev->max_element_buffer);
-            nk_convert(&glfw.ctx, &dev->cmds, &vbuf, &ebuf, &config);
+            nk_convert(&sdl.ctx, &dev->cmds, &vbuf, &ebuf, &config);
         }
 
         /* iterate over and execute each draw command */
@@ -1488,7 +1301,7 @@ VkSemaphore nk_glfw3_render(VkQueue graphics_queue, uint32_t buffer_index,
         vkCmdBindIndexBuffer(command_buffer, dev->index_buffer, 0,
                              VK_INDEX_TYPE_UINT16);
 
-        nk_draw_foreach(cmd, &glfw.ctx, &dev->cmds) {
+        nk_draw_foreach(cmd, &sdl.ctx, &dev->cmds) {
             if (!cmd->texture.ptr) {
                 continue;
             }
@@ -1527,7 +1340,7 @@ VkSemaphore nk_glfw3_render(VkQueue graphics_queue, uint32_t buffer_index,
                              0, 0);
             index_offset += cmd->elem_count;
         }
-        nk_clear(&glfw.ctx);
+        nk_clear(&sdl.ctx);
     }
 
     vkCmdEndRenderPass(command_buffer);
@@ -1558,48 +1371,16 @@ VkSemaphore nk_glfw3_render(VkQueue graphics_queue, uint32_t buffer_index,
     return dev->render_completed;
 }
 
-NK_API void nk_glfw3_char_callback(GLFWwindow *win, unsigned int codepoint) {
-    (void)win;
-    if (glfw.text_len < NK_GLFW_TEXT_MAX)
-        glfw.text[glfw.text_len++] = codepoint;
-}
-
-NK_API void nk_gflw3_scroll_callback(GLFWwindow *win, double xoff,
-                                     double yoff) {
-    (void)win;
-    (void)xoff;
-    glfw.scroll.x += (float)xoff;
-    glfw.scroll.y += (float)yoff;
-}
-
-NK_API void nk_glfw3_mouse_button_callback(GLFWwindow *window, int button,
-                                           int action, int mods) {
-    double x, y;
-    NK_UNUSED(mods);
-    if (button != GLFW_MOUSE_BUTTON_LEFT)
-        return;
-    glfwGetCursorPos(window, &x, &y);
-    if (action == GLFW_PRESS) {
-        double dt = glfwGetTime() - glfw.last_button_click;
-        if (dt > NK_GLFW_DOUBLE_CLICK_LO && dt < NK_GLFW_DOUBLE_CLICK_HI) {
-            glfw.is_double_click_down = nk_true;
-            glfw.double_click_pos = nk_vec2((float)x, (float)y);
-        }
-        glfw.last_button_click = glfwGetTime();
-    } else
-        glfw.is_double_click_down = nk_false;
-}
-
-NK_INTERN void nk_glfw3_clipboard_paste(nk_handle usr,
-                                        struct nk_text_edit *edit) {
-    const char *text = glfwGetClipboardString(glfw.win);
+NK_INTERN void nk_sdl_clipboard_paste(nk_handle usr,
+                                      struct nk_text_edit *edit) {
+    const char *text = SDL_GetClipboardText();
     if (text)
         nk_textedit_paste(edit, text, nk_strlen(text));
+    SDL_free((void *)text);
     (void)usr;
 }
 
-NK_INTERN void nk_glfw3_clipboard_copy(nk_handle usr, const char *text,
-                                       int len) {
+NK_INTERN void nk_sdl_clipboard_copy(nk_handle usr, const char *text, int len) {
     char *str = 0;
     (void)usr;
     if (!len)
@@ -1609,43 +1390,36 @@ NK_INTERN void nk_glfw3_clipboard_copy(nk_handle usr, const char *text,
         return;
     memcpy(str, text, (size_t)len);
     str[len] = '\0';
-    glfwSetClipboardString(glfw.win, str);
+    SDL_SetClipboardText(str);
     free(str);
 }
 
 NK_API struct nk_context *
-nk_glfw3_init(GLFWwindow *win, VkDevice logical_device,
-              VkPhysicalDevice physical_device,
-              uint32_t graphics_queue_family_index, VkImageView *image_views,
-              uint32_t image_views_len, VkFormat color_format,
-              enum nk_glfw_init_state init_state,
-              VkDeviceSize max_vertex_buffer, VkDeviceSize max_element_buffer) {
-    memset(&glfw, 0, sizeof(struct nk_glfw));
-    glfw.win = win;
-    if (init_state == NK_GLFW3_INSTALL_CALLBACKS) {
-        glfwSetScrollCallback(win, nk_gflw3_scroll_callback);
-        glfwSetCharCallback(win, nk_glfw3_char_callback);
-        glfwSetMouseButtonCallback(win, nk_glfw3_mouse_button_callback);
-    }
-    nk_init_default(&glfw.ctx, 0);
-    glfw.ctx.clip.copy = nk_glfw3_clipboard_copy;
-    glfw.ctx.clip.paste = nk_glfw3_clipboard_paste;
-    glfw.ctx.clip.userdata = nk_handle_ptr(0);
-    glfw.last_button_click = 0;
+nk_sdl_init(SDL_Window *win, VkDevice logical_device,
+            VkPhysicalDevice physical_device,
+            uint32_t graphics_queue_family_index, VkImageView *image_views,
+            uint32_t image_views_len, VkFormat color_format,
+            enum nk_sdl_init_state init_state, VkDeviceSize max_vertex_buffer,
+            VkDeviceSize max_element_buffer) {
+    (void)init_state;
 
-    glfwGetWindowSize(win, &glfw.width, &glfw.height);
-    glfwGetFramebufferSize(win, &glfw.display_width, &glfw.display_height);
+    memset(&sdl, 0, sizeof(struct nk_sdl));
+    sdl.win = win;
 
-    nk_glfw3_device_create(logical_device, physical_device,
-                           graphics_queue_family_index, image_views,
-                           image_views_len, color_format, max_vertex_buffer,
-                           max_element_buffer, (uint32_t)glfw.display_width,
-                           (uint32_t)glfw.display_height);
+    nk_init_default(&sdl.ctx, 0);
+    sdl.ctx.clip.copy = nk_sdl_clipboard_copy;
+    sdl.ctx.clip.paste = nk_sdl_clipboard_paste;
+    sdl.ctx.clip.userdata = nk_handle_ptr(0);
 
-    glfw.is_double_click_down = nk_false;
-    glfw.double_click_pos = nk_vec2(0, 0);
+    SDL_GetWindowSize(win, &sdl.width, &sdl.height);
+    SDL_Vulkan_GetDrawableSize(win, &sdl.display_width, &sdl.display_height);
+    nk_sdl_device_create(logical_device, physical_device,
+                         graphics_queue_family_index, image_views,
+                         image_views_len, color_format, max_vertex_buffer,
+                         max_element_buffer, (uint32_t)sdl.display_width,
+                         (uint32_t)sdl.display_height);
 
-    return &glfw.ctx;
+    return &sdl.ctx;
 }
 
 #endif
