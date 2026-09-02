@@ -5995,7 +5995,10 @@ struct nk_context {
 #define NK_PI 3.141592654f
 #define NK_PI_HALF 1.570796326f
 #define NK_UTF_INVALID 0xFFFD
+/* Digits after decimal for nk_property_float/double display. Overridable before include. */
+#ifndef NK_MAX_FLOAT_PRECISION
 #define NK_MAX_FLOAT_PRECISION 2
+#endif
 
 #define NK_UNUSED(x) ((void)(x))
 #define NK_SATURATE(x) (NK_MAX(0, NK_MIN(1.0f, x)))
