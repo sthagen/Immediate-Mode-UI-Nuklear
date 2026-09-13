@@ -141,6 +141,34 @@ style_text(struct nk_context* ctx, struct nk_style_text* out_style)
 }
 
 static void
+style_link(struct nk_context* ctx, struct nk_style_link* out_style)
+{
+	static const char *underlines[] = {"NONE", "HOVER", "ALWAYS"};
+	struct nk_style_link link = *out_style;
+	int underline;
+
+	nk_layout_row_dynamic(ctx, 30, 2);
+	style_rgb(ctx, "Text Normal:", &link.text_normal);
+	style_rgb(ctx, "Text Hover:", &link.text_hover);
+	style_rgb(ctx, "Text Active:", &link.text_active);
+
+	underline = (int)link.underline;
+	if (underline < 0) underline = 0;
+	if (underline > 2) underline = 2;
+	nk_label(ctx, "Underline:", NK_TEXT_LEFT);
+	underline = nk_combo(ctx, underlines, NK_LEN(underlines), underline, 25, nk_vec2(200,200));
+	link.underline = (enum nk_link_underline)underline;
+
+	nk_property_float(ctx, "#Underline Thickness:", 0.0f, &link.underline_thickness, 10.0f, 0.5f, 0.1f);
+	style_vec2(ctx, "Padding:", &link.padding);
+	style_vec2(ctx, "Touch Padding:", &link.touch_padding);
+	nk_property_float(ctx, "#Color Factor:", 0.0f, &link.color_factor, 1.0f, 0.1, 0.0025f);
+	nk_property_float(ctx, "#Disabled Factor:", 0.0f, &link.disabled_factor, 1.0f, 0.1, 0.0025f);
+
+	*out_style = link;
+}
+
+static void
 style_button(struct nk_context* ctx, struct nk_style_button* out_style, struct nk_style_button** duplicate_styles, int n_dups)
 {
 	struct nk_style_button button = *out_style;
@@ -806,6 +834,11 @@ style_configurator(struct nk_context *ctx, struct nk_color color_table[NK_COLOR_
 
 		if (nk_tree_push(ctx, NK_TREE_TAB, "Text", NK_MINIMIZED)) {
 			style_text(ctx, &style->text);
+			nk_tree_pop(ctx);
+		}
+
+		if (nk_tree_push(ctx, NK_TREE_TAB, "Link", NK_MINIMIZED)) {
+			style_link(ctx, &style->link);
 			nk_tree_pop(ctx);
 		}
 

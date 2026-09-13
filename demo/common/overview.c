@@ -191,6 +191,28 @@ overview(struct nk_context *ctx)
                 nk_tree_pop(ctx);
             }
 
+            if (nk_tree_push(ctx, NK_TREE_NODE, "Link", NK_MINIMIZED))
+            {
+                nk_layout_row_dynamic(ctx, 20, 1);
+                if (nk_link_label(ctx, "Default underlined link", NK_TEXT_LEFT))
+                    fprintf(stdout, "Link pressed!\n");
+                if (nk_link_label_hover_underline(ctx, "Underline on hover", NK_TEXT_LEFT))
+                    fprintf(stdout, "Hover-underline link pressed!\n");
+                if (nk_link_label_no_underline(ctx, "No underline", NK_TEXT_LEFT))
+                    fprintf(stdout, "No-underline link pressed!\n");
+                if (nk_link_label_colored(ctx, "Colored link", NK_TEXT_LEFT, nk_rgb(100,160,255)))
+                    fprintf(stdout, "Colored link pressed!\n");
+
+                nk_link_label(ctx, "Left aligned link", NK_TEXT_LEFT);
+                nk_link_label(ctx, "Centered link", NK_TEXT_CENTERED);
+                nk_link_label(ctx, "Right aligned link", NK_TEXT_RIGHT);
+
+                nk_widget_disable_begin(ctx);
+                nk_link_label(ctx, "Disabled link", NK_TEXT_LEFT);
+                nk_widget_disable_end(ctx);
+                nk_tree_pop(ctx);
+            }
+
             if (nk_tree_push(ctx, NK_TREE_NODE, "Button", NK_MINIMIZED))
             {
                 /* Buttons Widgets */
